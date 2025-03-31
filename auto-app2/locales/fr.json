@@ -1,0 +1,9 @@
+{
+    "welcome": "Bienvenue",
+    "login": {
+      "title": "Connexion",
+      "email": "Adresse email",
+      "password": "Mot de passe",
+      "submit": "Se connecter"
+    }
+  }
