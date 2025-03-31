@@ -5,8 +5,13 @@ const showPassword = ref(false)
 const isLoading = ref(false)
 const error = ref('')
 
-const { $supabase } = useNuxtApp()
 const router = useRouter()
+
+const runtimeConfig = useRuntimeConfig();
+
+const supabaseUrl = runtimeConfig.public.supabaseUrl;
+const supabaseAnonKey = runtimeConfig.public.supabaseKey;
+
 
 import axios from 'axios';
 
@@ -19,7 +24,7 @@ async function handleLogin() {
 
   try {
     const response = await axios.post(
-      'https://nitlrmzkefgmjtyrjicc.supabase.co/auth/v1/token?grant_type=password',
+      supabaseUrl+"/auth/v1/token?grant_type=password",
       {
         email: email.value,
         password: password.value
@@ -27,7 +32,7 @@ async function handleLogin() {
       {
         headers: {
           'Content-Type': 'application/json',
-          'apikey': 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im5pdGxybXprZWZnbWp0eXJqaWNjIiwicm9sZSI6ImFub24iLCJpYXQiOjE3NDIwMjA5MzQsImV4cCI6MjA1NzU5NjkzNH0.2IBAqF0ZpLbR-v_AXTxCOw5FpOvqdmQyNG8iMolP-rk',
+          'apikey': supabaseAnonKey,
         },
       }
     );
@@ -35,6 +40,12 @@ async function handleLogin() {
     // La connexion a réussi, la réponse contient les informations de session
     console.log('Connexion réussie:', response.data);
     // Vous pouvez stocker le token et rediriger l'utilisateur ici
+    // Stocker l'access token dans la session du navigateur
+    sessionStorage.setItem('supabaseAccessToken', response.data.access_token);
+    sessionStorage.setItem('supabaseRefreshToken', response.data.refresh_token);
+    sessionStorage.setItem('supabaseExpiresAt', response.data.expires_at);
+    // sessionStorage.setItem('user', response.data.user);
+    // 
     router.push('/listing') // Exemple de redirection
   } catch (err) {
     console.error('Erreur lors de la connexion:', err);
@@ -91,6 +102,7 @@ function showToast(title, desc, icon) {
   <div class="min-h-screen text-center bg-gradient-to-br from-red-50 to-primary-500 flex items-center justify-center p-4">
     <UCard class="w-full max-w-md shadow-xl">
       <template #header>
+        
         <div class="text-center space-y-3">
           
           <UIcon size="50" name="i-heroicons-user" class="w-12 h-12 mx-auto text-primary-500" />
