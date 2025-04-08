@@ -540,6 +540,8 @@ const scrapStatus = ref('');
 const totalToProcess = ref(0);
 const alreadyProcessed = ref(0);
 const toast = useToast()
+const config = useRuntimeConfig();
+const urlAPI = config.public.urlAPI;
 
 function showToast(title, desc, icon, colore) {
   toast.add({
@@ -580,7 +582,7 @@ async function getAllCars() {
   const accessToken = sessionStorage.getItem('AccessToken');
   const refToken = sessionStorage.getItem('RefreshToken');
   try {
-    const response = await axios.get("http://157.180.69.73:8000/get_all_cars",
+    const response = await axios.get(urlAPI+"/get_all_cars",
       {
         params: {
           access_token: accessToken,
@@ -618,7 +620,7 @@ async function getCarComparisons(id) {
   const accessToken = sessionStorage.getItem('AccessToken');
   const refToken = sessionStorage.getItem('RefreshToken');
   try {
-    const response = await axios.get("http://157.180.69.73:8000/get_car_comparisons",
+    const response = await axios.get(urlAPI+"/get_car_comparisons",
       {
         params: {
           access_token: accessToken,
@@ -656,7 +658,7 @@ async function startScrapping() {
   const accessToken = sessionStorage.getItem('AccessToken');
   const refToken = sessionStorage.getItem('RefreshToken');
   try {
-    const response = await axios.get("http://157.180.69.73:8000/start_scraping",
+    const response = await axios.get(urlAPI+"/start_scraping",
       {
         params: {
           access_token: accessToken,
@@ -694,7 +696,7 @@ async function seeStatus() {
   const accessToken = sessionStorage.getItem('AccessToken');
   const refToken = sessionStorage.getItem('RefreshToken');
   try {
-    const response = await axios.get("http://157.180.69.73:8000/scrape_status",
+    const response = await axios.get(urlAPI+"/scrape_status",
       {
         params: {
           access_token: accessToken,
@@ -815,7 +817,7 @@ const importFile = async () => {
   formData.append('file', file.value);
 
   try {
-    const response = await axios.post('http://157.180.69.73:8000/upload', formData, {
+    const response = await axios.post('urlAPI/upload', formData, {
       headers: {
         'Content-Type': 'multipart/form-data',
       },

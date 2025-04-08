@@ -53,6 +53,8 @@ const showPassword = ref(false)
 const isLoading = ref(false)
 const error = ref('')
 const router = useRouter()
+const config = useRuntimeConfig();
+const urlAPI = config.public.urlAPI;
 
 import axios from 'axios';
 
@@ -61,7 +63,7 @@ async function handleLogin() {
   isLoading.value = true
   error.value = ''
   try {
-    const response = await axios.post("http://157.180.69.73:8000/login", 
+    const response = await axios.post(urlAPI+"/login", 
       "",
       {
         params: {
