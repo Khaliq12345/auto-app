@@ -1,5 +1,5 @@
 <template>
-  <progress :value="currentLevel" max="100" :style="progressStyle"></progress>
+  <progress :value="currentLevel" max=100 :style="progressStyle"></progress>
 </template>
 
 <script>
