@@ -17,13 +17,38 @@
               </UButton>
             </div>
           </template>
-          <div class="space-y-6">
+          <div class="">
+            <!-- Scrapping Status -->
+            <UAlert :title="'Scraping Status ( ' + scrapStatus + ' )' " :description="'Last Scraping Since : ' + lastScrap" :color="totalToProcess !== alreadyProcessed? 'warning':'success'"
+              icon="i-heroicons-presentation-chart-line" variant="subtle"  :actions="[
+                {
+                  label: 'Total to Process : ' + totalToProcess,
+                  class: 'py-2 text-start',
+                  variant: 'subtle',
+                  color: 'error'
+                },
+                {
+                  label: 'Already Processed : ' + alreadyProcessed,
+                  class: 'py-2 text-end',
+                  variant: 'subtle',
+                  color: 'success'
+                }
+              ]" />
+              <div class="text-end">
+                <UButton label="Refresh Status" icon="i-heroicons-arrow-path" class="my-2" @click="seeStatus"
+              color="warning" />
+              </div>
+            
             <USeparator label="Process Your Data" />
-            <div class="container mx-auto px-4 text-center">
+            <div class="container mx-auto px-4 my-2 text-center">
               <h1 class="text-2xl font-bold mb-4">Start By Uploading Your Excel File</h1>
-              <input type="file" @change="handleFileChange" accept=".xlsx, .xls" class="mb-4 border-b-emerald-300">
-              <UButton :disabled="!file" :loading="isImporting" @click="importFile" label="Import" color="primary"
-                icon="i-heroicons-arrow-up-tray" />
+              <UButtonGroup class="mb-4 ">
+                <UInput color="neutral" type="file" variant="subtle" icon="i-heroicons-document"
+                  @change="handleFileChange" accept=".xlsx, .xls" />
+                <UButton :disabled="!file" :loading="isImporting" @click="importFile" label="Import" color="primary"
+                  icon="i-heroicons-arrow-up-tray" />
+              </UButtonGroup>
+
               <UProgress v-if="isImporting" :value="uploadProgress" max="100" class="mt-4 mb-2" />
               <p v-if="isImporting">Uploading : <span class="font-bold text-amber-600">{{ uploadProgress }}</span> %</p>
               <UAlert v-if="importError" :title="importError" color="error" class="mt-2 mb-4" :close="{
@@ -39,8 +64,8 @@
               <div v-if="importSuccess" class="justify-end flex">
                 <UButton v-if="!scrapStarted" label="Start Scrapping" icon="i-heroicons-chevron-double-right"
                   class="justify-center" @click="startScrapping" color="info" />
-                <UButton v-if="scrapStarted" label="Check Status" icon="i-heroicons-eye" class=" justify-center"
-                  @click="seeStatus" color="warning" />
+                <!-- <UButton v-if="scrapStarted" label="Check Status" icon="i-heroicons-eye" class=" justify-center"
+                  @click="seeStatus" color="warning" /> -->
               </div>
             </div>
           </div>
@@ -83,13 +108,11 @@
               <p>Loading Data ... </p>
             </div>
           </div>
-          <div v-if="(searchTerm && filteredCars.length == 0)"
-            class="text-center my-15">
+          <div v-if="(searchTerm && filteredCars.length == 0)" class="text-center my-15">
             <UIcon size="100" name="i-heroicons-exclamation-circle" class="mx-auto align-sub  text-red-300 " />
             <p class="font-bold"> No Matching Results !</p>
           </div>
-          <div v-if="(!loadingCars && cars.length == 0)"
-            class="text-center my-15">
+          <div v-if="(!loadingCars && cars.length == 0)" class="text-center my-15">
             <UIcon size="100" name="i-heroicons-circle-stack" class="mx-auto align-sub  text-red-300 " />
             <p class="font-bold"> No Data to Show !</p>
           </div>
@@ -103,8 +126,8 @@
           <CarResultsModal v-model="isModalOpen" :selectedCar="selectedCar" :resLaCentrale="resLaCentrale"
             :resAutoScout="resAutoScout" :relatedCars="relatedCars" />
           <!-- Modal For Status -->
-          <ScrapStatusModal v-model="isStatusModalOpen" :totalToProcess="totalToProcess"
-            :alreadyProcessed="alreadyProcessed" :scrapStatus="scrapStatus" />
+          <!-- <ScrapStatusModal v-model="isStatusModalOpen" :totalToProcess="totalToProcess"
+            :alreadyProcessed="alreadyProcessed" :scrapStatus="scrapStatus" /> -->
           <!-- Pagination -->
           <div class="justify-center">
             <UPagination v-model:page="currentPage" :total="filteredCars.length" :to="to" :sibling-count="1" show-edges
@@ -124,7 +147,8 @@ import ListModel from '../components/listing/ListModel.vue';
 import ScrapStatusModal from '../components/listing/ScrapStatusModal.vue';
 import CarResultsModal from '../components/listing/CarResultsModal.vue';
 import { useListingFunctions } from '~/composables/useListingFunctions';
-const { loadingCars, globalLoading, isStatusModalOpen, scrapStarted, scrapStatus, totalToProcess, alreadyProcessed, title, isModalOpen, selectedCar, relatedCars, resLaCentrale, resAutoScout, searchTerm, selectedColors, selectedModels, currentPage, itemsPerPage, cars, file, isImporting, uploadProgress, importError, importSuccess, handleLogout, getAllCars, getCarComparisons, startScrapping, seeStatus, availableColors, availableModels, filteredCars, pageCount, paginatedCars, openModal, to, handleFileChange, importFile } = useListingFunctions();
+import { UInput } from '#components';
+const { loadingCars, globalLoading, isStatusModalOpen, scrapStarted,lastScrap, scrapStatus, totalToProcess, alreadyProcessed, title, isModalOpen, selectedCar, relatedCars, resLaCentrale, resAutoScout, searchTerm, selectedColors, selectedModels, currentPage, itemsPerPage, cars, file, isImporting, uploadProgress, importError, importSuccess, handleLogout, getAllCars, getCarComparisons, startScrapping, seeStatus, availableColors, availableModels, filteredCars, pageCount, paginatedCars, openModal, to, handleFileChange, importFile } = useListingFunctions();
 definePageMeta({
   middleware: ["auth"]
 })

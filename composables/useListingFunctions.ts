@@ -8,7 +8,8 @@ export function useListingFunctions() {
     const globalLoading = ref(false);
     const isStatusModalOpen = ref(false);
     const scrapStarted = ref(false);
-    const scrapStatus = ref('');
+    const scrapStatus = ref('100 %');
+    const lastScrap = ref('- - -');
     const totalToProcess = ref(0);
     const alreadyProcessed = ref(0);
     const { showToast } = useNotifications();
@@ -172,6 +173,7 @@ export function useListingFunctions() {
             totalToProcess.value = response.data.details.data[0].total_running;
             alreadyProcessed.value = response.data.details.data[0].total_completed;
             scrapStatus.value = (alreadyProcessed.value * 100 / totalToProcess.value) + ' %';
+            lastScrap.value = response.data.details.data[0].stopped_at??'- - -';
             // Stocker l'access token dans la session du navigateur
             sessionStorage.setItem('AccessToken', response.data.session.session.access_token);
             sessionStorage.setItem('RefreshToken', response.data.session.session.refresh_token);
@@ -186,15 +188,16 @@ export function useListingFunctions() {
         isStatusModalOpen.value = true;
 
     }
+    // seeStatus
     // 
     const availableColors = computed(() => cars.value ? [...new Set(cars.value.map(car => car.color))].filter(Boolean).map(color => ({ label: color, value: color })) : ['Rouge', 'Bleu']);
     const availableModels = computed(() => cars.value ? [...new Set(cars.value.map(car => car.make))].filter(Boolean).map(model => ({ label: model, value: model })) : []);
     var filteredCars = computed(() => {
         return cars.value.filter(car => {
             const searchMatch = searchTerm.value ?
-            (car?.make as string)?.toLowerCase()?.includes(searchTerm.value.toLowerCase()) ||
-            (car?.version as string)?.toLowerCase()?.includes(searchTerm.value.toLowerCase()) ||
-            (car?.model as string)?.toLowerCase()?.includes(searchTerm.value.toLowerCase()) :
+                (car?.make as string)?.toLowerCase()?.includes(searchTerm.value.toLowerCase()) ||
+                (car?.version as string)?.toLowerCase()?.includes(searchTerm.value.toLowerCase()) ||
+                (car?.model as string)?.toLowerCase()?.includes(searchTerm.value.toLowerCase()) :
                 true;
 
             const colorMatch = selectedColors.value.length ? selectedColors.value.includes(car.color) : true;
@@ -264,12 +267,30 @@ export function useListingFunctions() {
             // }, 2000);
         }
     }
+    let intervalId: NodeJS.Timeout | null = null;
+
+    const setupMyInterval = (callback: () => void, intervalMs: number) => {
+        callback(); // Run the function immediately
+        intervalId = setInterval(callback, intervalMs);
+    };
+
+    onMounted(() => {
+        setupMyInterval(seeStatus, 10000);
+    });
+
+    onUnmounted(() => {
+        if (intervalId) {
+            clearInterval(intervalId);
+            intervalId = null;
+        }
+    });
 
     return {
         loadingCars,
         globalLoading,
         isStatusModalOpen,
         scrapStarted,
+        lastScrap,
         scrapStatus,
         totalToProcess,
         alreadyProcessed,
