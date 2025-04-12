@@ -10,17 +10,23 @@
               <div>
                 <h1 class="text-3xl font-bold ">Welcome Back !</h1>
                 <p class="text-gray-500 mt-1">Faster Analysis & Decision Making</p>
+
               </div>
               <UButton color="gray" variant="ghost" icon="i-heroicons-arrow-left-end-on-rectangle" @click="handleLogout"
                 class="text-error-500 cursor-pointer">
                 Log Out
               </UButton>
             </div>
+            <div class="w-full place-items-center">
+              <UNavigationMenu :items="menuItems" orientation="vertical" class="" />
+            </div>
           </template>
           <div class="">
             <!-- Scrapping Status -->
-            <UAlert :title="'Scraping Status ( ' + scrapStatus + ' )' " :description="'Last Scraping Since : ' + lastScrap" :color="totalToProcess !== alreadyProcessed? 'warning':'success'"
-              icon="i-heroicons-presentation-chart-line" variant="subtle"  :actions="[
+            <UAlert :title="'Scraping Status ( ' + scrapStatus + ' )'"
+              :description="'Last Scraping Since : ' + lastScrap"
+              :color="totalToProcess !== alreadyProcessed ? 'warning' : 'success'"
+              icon="i-heroicons-presentation-chart-line" variant="subtle" :actions="[
                 {
                   label: 'Total to Process : ' + totalToProcess,
                   class: 'py-2 text-start',
@@ -34,11 +40,11 @@
                   color: 'success'
                 }
               ]" />
-              <div class="text-end">
-                <UButton label="Refresh Status" icon="i-heroicons-arrow-path" class="my-2" @click="seeStatus"
-              color="warning" />
-              </div>
-            
+            <div class="text-end">
+              <UButton label="Refresh Status" icon="i-heroicons-arrow-path" class="my-2" @click="seeStatus"
+                color="warning" />
+            </div>
+
             <USeparator label="Process Your Data" />
             <div class="container mx-auto px-4 my-2 text-center">
               <h1 class="text-2xl font-bold mb-4">Start By Uploading Your Excel File</h1>
@@ -148,11 +154,32 @@ import ScrapStatusModal from '../components/listing/ScrapStatusModal.vue';
 import CarResultsModal from '../components/listing/CarResultsModal.vue';
 import { useListingFunctions } from '~/composables/useListingFunctions';
 import { UInput } from '#components';
-const { loadingCars, globalLoading, isStatusModalOpen, scrapStarted,lastScrap, scrapStatus, totalToProcess, alreadyProcessed, title, isModalOpen, selectedCar, relatedCars, resLaCentrale, resAutoScout, searchTerm, selectedColors, selectedModels, currentPage, itemsPerPage, cars, file, isImporting, uploadProgress, importError, importSuccess, handleLogout, getAllCars, getCarComparisons, startScrapping, seeStatus, availableColors, availableModels, filteredCars, pageCount, paginatedCars, openModal, to, handleFileChange, importFile } = useListingFunctions();
+const { loadingCars, globalLoading, isStatusModalOpen, scrapStarted, lastScrap, scrapStatus, totalToProcess, alreadyProcessed, title, isModalOpen, selectedCar, relatedCars, resLaCentrale, resAutoScout, searchTerm, selectedColors, selectedModels, currentPage, itemsPerPage, cars, file, isImporting, uploadProgress, importError, importSuccess, handleLogout, getAllCars, getCarComparisons, startScrapping, seeStatus, availableColors, availableModels, filteredCars, pageCount, paginatedCars, openModal, to, handleFileChange, importFile } = useListingFunctions();
 definePageMeta({
   middleware: ["auth"]
 })
 onMounted(() => {
   getAllCars();
 });
+
+const menuItems = ref([
+  {
+    label: 'Best Deals',
+    icon: 'i-heroicons-cube-transparent',
+    children: [
+      {
+        label: 'AutoScout24  ',
+        icon: 'i-heroicons-rectangle-group',
+        to: '/best-deals?domain=https://www.autoscout24.fr/',
+        // target: '_blank'
+      },
+      {
+        label: 'La Centrale  ',
+        icon: 'i-heroicons-rectangle-group',
+        to: '/best-deals?domain=https://www.lacentrale.fr/',
+        // target: '_blank'
+      }
+    ]
+  },
+]) 
 </script>

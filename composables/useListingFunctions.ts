@@ -190,7 +190,7 @@ export function useListingFunctions() {
     }
     // seeStatus
     // 
-    const availableColors = computed(() => cars.value ? [...new Set(cars.value.map(car => car.color))].filter(Boolean).map(color => ({ label: color, value: color })) : ['Rouge', 'Bleu']);
+    const availableColors = computed(() => cars.value ? [...new Set(cars.value.map(car => car.color))].filter(Boolean).map(color => ({ label: color, value: color })) : []);
     const availableModels = computed(() => cars.value ? [...new Set(cars.value.map(car => car.make))].filter(Boolean).map(model => ({ label: model, value: model })) : []);
     var filteredCars = computed(() => {
         return cars.value.filter(car => {
