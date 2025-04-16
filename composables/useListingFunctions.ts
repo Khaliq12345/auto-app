@@ -1,3 +1,4 @@
+import type { RefSymbol } from '@vue/reactivity';
 import axios from 'axios';
 import { useNotifications } from '~/utils/globals';
 
@@ -202,7 +203,7 @@ export function useListingFunctions() {
     const availableColors = computed(() => cars.value ? [...new Set(cars.value.map(car => car.color))].filter(Boolean).map(color => ({ label: color, value: color })) : []);
     const availableModels = computed(() => cars.value ? [...new Set(cars.value.map(car => car.make))].filter(Boolean).map(model => ({ label: model, value: model })) : []);
     const availableDeals = computed(() => cars.value ? [...new Set(cars.value.map(car => car.card_color))].filter(Boolean).map(card_color => ({ label: card_color == 'red' ? 'Worst Deals' : card_color == 'green' ?  'Best Deals' : 'Not Bads', value: card_color })) : []);
-    var filteredCars = computed(() => {
+    const filteredCars = computed(() => {
         return cars.value.filter(car => {
             const searchMatch = searchTerm.value ?
                 (car?.make as string)?.toLowerCase()?.includes(searchTerm.value.toLowerCase()) ||
@@ -213,6 +214,8 @@ export function useListingFunctions() {
             const colorMatch = selectedColors.value.length ? selectedColors.value.includes(car.color) : true;
             const modelMatch = selectedModels.value.length ? selectedModels.value.includes(car.make) : true;
             const dealMatch = selectedDeals.value.length ? selectedDeals.value.includes(car.card_color) : true;
+
+            currentPage.value = 1
 
             return searchMatch && colorMatch && modelMatch && dealMatch;
         });
