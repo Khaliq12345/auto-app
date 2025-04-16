@@ -61,6 +61,12 @@
                   <UIcon size="15" name="i-heroicons-link" class="text-blue-500" /> Link
                 </a>
     </div>
+    <div v-else class="text-center flex justify-center gap-x-3 w-100">
+      <span class="text-sm  mb-4">
+        <UIcon size="20" name="i-heroicons-sparkles" class="mx-auto align-sub text-warning-500" />
+        No Best Matching !
+      </span>
+    </div>
 
     <div class="text-center md:text-end">
       <UButton label="View Details" icon="i-heroicons-eye" class="w-52 justify-center" @click="$emit('view', car)" />
