@@ -62,7 +62,7 @@ export function useBDealsFunctions() {
                         // page : 4,
                         cut_off_price: cutOffPrice.value,
                         domain: domainVar,
-                        limit: 1000
+                        limit: 250
                     },
                     headers: {
                         "accept": "application/json",
