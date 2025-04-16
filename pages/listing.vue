@@ -78,8 +78,8 @@
         </UCard>
       </UContainer>
       <!-- Listing Card -->
-      <UContainer class="mt-4">
-        <UCard :title="title" :ui="{ rounded: 'lg', shadow: 'md' }" class="flex justify-center">
+      <UContainer class="mt-4 ">
+        <UCard :title="title" :ui="{ rounded: 'lg', shadow: 'md' }" class="">
           <!-- Search -->
           <div class="text-center place-self-center">
             <UFormField class="text-center">

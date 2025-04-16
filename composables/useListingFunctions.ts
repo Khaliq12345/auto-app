@@ -237,11 +237,12 @@ export function useListingFunctions() {
         isModalOpen.value = true;
     };
     const to = (page: any) => {
+        console.log(" holla", page);
         return {
             query: {
                 page
             },
-            hash: '#with-links'
+            // hash: '#with-links'
         }
     }
     // 

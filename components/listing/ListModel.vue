@@ -1,5 +1,6 @@
 <template>
-    <UCard :ui="{ rounded: 'lg', shadow: 'md' }" :class="`shadow-lg hover:shadow-xl transition-shadow duration-300 bg-${car.card_color}-500`">
+    <UCard :ui="{ rounded: 'lg', shadow: 'md' }" :class="`text-white shadow-lg hover:shadow-xl transition-shadow duration-300 `"
+    :style="`background-color: ${car.card_color}`">
       <template #header>
         <div class="flex items-center justify-between">
           <div class="flex items-center space-x-4">
@@ -11,7 +12,7 @@
             />
             <div>
               <h3 class="text-lg font-bold">{{ car.make + ' ' + car.version }}</h3>
-              <p class="text-gray-500">ID : {{ car.id }}</p>
+              <p class="">ID : {{ car.id }}</p>
             </div>
           </div>
           <UButton label="" icon="i-heroicons-information-circle" @click="$emit('view', car)" />
@@ -25,27 +26,27 @@
           class="w-full md:w-1/3 h-25 md:h-48 object-cover rounded-lg"
         />
         <div class="flex-1">
-          <h2 class="text-gray-600 font-semibold"> <span class="font-bold">Model :</span> {{ car.model }}</h2>
-          <p class="text-gray-600"></p>
-          <p class="text-sm text-gray-500 mt-2">
+          <h2 class=" font-semibold"> <span class="font-bold">Model :</span> {{ car.model }}</h2>
+          <p class=""></p>
+          <p class="text-sm  mt-2">
             <UIcon size="20" name="i-heroicons-paint-brush" class="mx-auto align-sub text-primary-500" />
             {{ car.color }} •
             <UIcon size="20" name="i-heroicons-arrow-trending-up" class="mx-auto align-sub text-primary-500" />
             {{ car.mileage }} km
           </p>
-          <p class="text-sm text-gray-500 mt-2">
+          <p class="text-sm  mt-2">
             <UIcon size="20" name="i-heroicons-currency-dollar" class="mx-auto align-sub text-primary-500" />
             Price : {{ car.price.toFixed(2) }}
           </p>
-          <p class="text-sm text-gray-500 mt-2">
+          <p class="text-sm  mt-2">
             <UIcon size="20" name="i-heroicons-currency-dollar" class="mx-auto align-sub text-primary-500" />
             Average Price : {{ car.average_price.toFixed(2) }}
           </p>
-          <p class="text-sm text-gray-500 mt-2 mb-2">
+          <p class="text-sm  mt-2 mb-2">
             <UIcon size="20" name="i-heroicons-currency-dollar" class="mx-auto align-sub text-primary-500" />
             Lowest Price : {{ car.lowest_price.toFixed(2) }}
           </p>
-          <p class="text-sm text-gray-500 mt-2 mb-2">
+          <p class="text-sm  mt-2 mb-2">
             <UIcon size="20" name="i-heroicons-wrench-screwdriver" class="mx-auto align-sub text-primary-500" />
             Fuel Type : {{ car.fuel_type }}
           </p>
