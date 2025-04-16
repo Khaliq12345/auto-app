@@ -225,9 +225,9 @@ const
 definePageMeta({
   middleware: ["auth"]
 })
-onMounted(() => {
-  getAllCars();
-});
+// onMounted(() => {
+//   getAllCars();
+// });
 
 const menuItems = ref([
   {

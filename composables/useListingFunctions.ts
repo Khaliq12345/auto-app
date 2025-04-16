@@ -63,7 +63,7 @@ export function useListingFunctions() {
                         // page : 4,
                         cut_off_price: cutOffPrice.value,
                         domain: '',
-                        limit: 1000
+                        limit: 250
                     },
                     headers: {
                         "accept": "application/json",
@@ -286,6 +286,7 @@ export function useListingFunctions() {
     };
 
     onMounted(() => {
+        getAllCars();
         setupMyInterval(seeStatus, 10000);
     });
 
