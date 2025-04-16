@@ -9,13 +9,39 @@ export function useBDealsFunctions() {
     // Cars
     const title = 'Deals Listing';
     const searchTerm = ref('');
+    const cutOffPrice = ref(500);
+    const mPercent = ref(95);
     const selectedColors = ref<any[]>([]);
     const selectedModels = ref<any[]>([]);
+    const selectedDeals = ref<any[]>([]);
+    const isModalOpen = ref(false);
+    const selectedCar = ref(null);
+    const relatedCars = ref<any[]>([]);
+    const resLaCentrale = ref();
+    const resAutoScout = ref();
     const currentPage = ref(1);
     const itemsPerPage = 10;
     const cars = ref<any[]>([])
+    const route = useRoute()
+    const domain = computed(() => route.query.domain)
+    // 
+    // watchEffect(() => {
+    //     if (domain.value) {
+    //         console.log("Domain reçu :", domain.value)
+    //         getAllCars(domain.value);
+    //     }
+    // })
+    onMounted(() => {
+        console.log("Domain reçu :", domain.value)
+        getAllCars(domain.value);
+    });
     // Methods
     // 
+    const reloadPage = () => {
+        getAllCars(domain.value)
+        // window.location.reload()
+        // navigateTo(route.fullPath, { replace: true })
+    }
     const handleLogout = async () => {
         // Supprimer les informations de session
         sessionStorage.removeItem('AccessToken');
@@ -23,18 +49,20 @@ export function useBDealsFunctions() {
         sessionStorage.removeItem('ExpiresAt');
         router.push('/login');
     };
-    const getAllCars = async (domainVar: string) => {
-        console.log("In lauc ", domainVar);
+    const getAllCars = async (domainVar: any) => {
         loadingCars.value = true;
         const accessToken = sessionStorage.getItem('AccessToken');
         const refToken = sessionStorage.getItem('RefreshToken');
         try {
-            const response = await axios.get(urlAPI + "/get_best_deals",
+            const response = await axios.get(urlAPI + "/get_all_cars",
                 {
                     params: {
                         access_token: accessToken,
                         refresh_token: refToken,
-                        domain : domainVar,
+                        // page : 4,
+                        cut_off_price: cutOffPrice.value,
+                        domain: domainVar,
+                        limit: 1000
                     },
                     headers: {
                         "accept": "application/json",
@@ -44,7 +72,7 @@ export function useBDealsFunctions() {
             );
 
             // 
-            console.log('Got Best Deals:', response.data);
+            console.log('Get Cars:', response.data);
             cars.value = response.data.details;
             // Stocker l'access token dans la session du navigateur
             sessionStorage.setItem('AccessToken', response.data.session.session.access_token);
@@ -62,6 +90,7 @@ export function useBDealsFunctions() {
     // 
     const availableColors = computed(() => cars.value ? [...new Set(cars.value.map(car => car.color))].filter(Boolean).map(color => ({ label: color, value: color })) : []);
     const availableModels = computed(() => cars.value ? [...new Set(cars.value.map(car => car.make))].filter(Boolean).map(model => ({ label: model, value: model })) : []);
+    const availableDeals = computed(() => cars.value ? [...new Set(cars.value.map(car => car.card_color))].filter(Boolean).map(card_color => ({ label: card_color == 'red' ? 'Worst Deals' : card_color == 'green' ? 'Best Deals' : 'Not Bads', value: card_color })) : []);
     var filteredCars = computed(() => {
         return cars.value.filter(car => {
             const searchMatch = searchTerm.value ?
@@ -72,8 +101,9 @@ export function useBDealsFunctions() {
 
             const colorMatch = selectedColors.value.length ? selectedColors.value.includes(car.color) : true;
             const modelMatch = selectedModels.value.length ? selectedModels.value.includes(car.make) : true;
+            const dealMatch = selectedDeals.value.length ? selectedDeals.value.includes(car.card_color) : true;
 
-            return searchMatch && colorMatch && modelMatch;
+            return searchMatch && colorMatch && modelMatch && dealMatch;
         });
     });
     const pageCount = computed(() => Math.ceil(filteredCars.value.length / itemsPerPage));
@@ -82,7 +112,17 @@ export function useBDealsFunctions() {
         const end = start + itemsPerPage;
         return filteredCars.value.slice(start, end);
     });
-  
+    const openModal = async (car: any) => {
+        selectedCar.value = car;
+        const result = car.comparisons  //await getCarComparisons(car.id)
+        console.log('result ', result);
+        // gat comparaisons
+        relatedCars.value = result;
+        resLaCentrale.value = computed(() => { return relatedCars.value.filter(vtr => vtr.domain === 'https://www.lacentrale.fr/').length ?? 0 });
+        resAutoScout.value = computed(() => { return relatedCars.value.filter(vtr => vtr.domain === 'https://www.autoscout24.fr/').length ?? 0 });
+        isModalOpen.value = true;
+    };
+
     const to = (page: any) => {
         return {
             query: {
@@ -92,14 +132,25 @@ export function useBDealsFunctions() {
         }
     }
     // 
-   
+
 
     return {
+        mPercent,
+        openModal,
+  isModalOpen,
+  selectedCar,
+  resLaCentrale,
+  resAutoScout,
+  relatedCars,
+        domain,
+        cutOffPrice,
+        reloadPage,
         loadingCars,
         title,
         searchTerm,
         selectedColors,
         selectedModels,
+        selectedDeals,
         currentPage,
         itemsPerPage,
         cars,
@@ -107,6 +158,7 @@ export function useBDealsFunctions() {
         getAllCars,
         availableColors,
         availableModels,
+        availableDeals,
         filteredCars,
         pageCount,
         paginatedCars,

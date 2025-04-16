@@ -9,12 +9,21 @@
             <div class="flex justify-between items-center">
               <div>
                 <h1 class="text-3xl font-bold ">Find Best Deals !</h1>
-                <p class="text-gray-500 mt-1">From <ULink :to="domain" target="_blank" class="text-blue-500" >{{ domain == 'https://www.autoscout24.fr/' ? 'AutoScout24' : 'La Centrale' }}</ULink> </p>
+                <p class="text-gray-500 mt-1">From <ULink :to="domain" target="_blank" class="text-blue-500 font-bold" >{{ domain == 'https://www.autoscout24.fr/' ? 'AutoScout24' : 'La Centrale' }}</ULink> </p>
               </div>
+              <div class="text-end">
+                <ULink to="/listing"  class="" >
+              <UButton color="gray" variant="ghost" icon="i-heroicons-arrow-uturn-left" @click=""
+                class=" cursor-pointer">
+                Back
+              </UButton>
+            </ULink>
               <UButton color="gray" variant="ghost" icon="i-heroicons-arrow-left-end-on-rectangle" @click="handleLogout"
                 class="text-error-500 cursor-pointer">
                 Log Out
               </UButton>
+              </div>
+             
             </div>
           </template>
           <div class="">
@@ -43,16 +52,52 @@
               Filters
             </div>
             <template #content>
-              <div class="grid  grid-cols-2 gap-4 py-5 text-center ">
-                <UFormField>
-                  <USelect v-model="selectedColors" icon="i-heroicons-paint-brush" :items="availableColors" multiple
-                    clearable :placeholder="availableColors.length ? 'By color' : 'No Available Color'">
-                  </USelect>
-                </UFormField>
-                <UFormField>
-                  <USelect v-model="selectedModels" icon="i-heroicons-swatch" :items="availableModels" multiple
-                    clearable :placeholder="availableModels.length ? 'By model' : 'No Available Model'" />
-                </UFormField>
+              <div class="text-center" >
+                <div class="grid  grid-cols-2 gap-4 py-5 text-center ">
+                  <div class="">
+                    <span class=" text-xs font-bold">Cut Off Price</span>
+                <div class="text-center place-self-center mt-2">
+                  <UButtonGroup class="mb-4 ">
+                    <UInput size="lg" v-model="cutOffPrice" type="number" placeholder="" icon="i-heroicons-currency-dollar"
+                      class="w-30 justify-center"/>
+                    <UButton :disabled="!cutOffPrice" :loading="loadingCars" @click="reloadPage" label="Reload" color="primary"
+                      icon="i-heroicons-arrow-path" />
+                  </UButtonGroup>
+                </div>
+                  </div>
+                  <!--  -->
+                  <div class="">
+                    <span class=" text-xs font-bold">Matching Percent</span>
+                <div class="text-center place-self-center mt-2">
+                  <UButtonGroup class="mb-4 ">
+                    <UInput size="lg" v-model="mPercent" type="number" placeholder="" icon="i-heroicons-percent-badge"
+                      class="w-30 justify-center"/>
+                    <UButton :disabled="true" label=" % " color="primary" />
+                  </UButtonGroup>
+                </div>
+                  </div>
+                </div>
+                
+
+
+
+                <div class="grid  grid-cols-3 gap-4 py-5 text-center ">
+                  <UFormField>
+                    <USelect v-model="selectedColors" icon="i-heroicons-paint-brush" :items="availableColors" multiple
+                      clearable :placeholder="availableColors.length ? 'By color' : 'No Available Color'">
+                    </USelect>
+                  </UFormField>
+                  <UFormField>
+                    <USelect v-model="selectedModels" icon="i-heroicons-swatch" :items="availableModels" multiple
+                      clearable :placeholder="availableModels.length ? 'By model' : 'No Available Model'" />
+                  </UFormField>
+                  <UFormField>
+                    <USelect v-model="selectedDeals" icon="i-heroicons-sparkles" :items="availableDeals" multiple
+                      clearable :placeholder="availableDeals.length ? 'By Deals' : 'No Available Option'">
+                    </USelect>
+                  </UFormField>
+                </div>
+
               </div>
             </template>
           </UCollapsible>
@@ -73,10 +118,13 @@
           </div>
           <div v-if="!loadingCars && cars.length != 0" class="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <div v-for="car in paginatedCars" :key="car.id" class="relative">
-              <ListModel :key="car.id" :car="car" />
+              <ListModel :key="car.id" :car="car" :mPercent="mPercent" @view="openModal"/>
             </div>
           </div>
           <!-- Others -->
+           <!-- Modal For Details -->
+          <CarResultsModal v-model="isModalOpen" :selectedCar="selectedCar" :resLaCentrale="resLaCentrale"
+            :resAutoScout="resAutoScout" :relatedCars="relatedCars" />
           <!-- Pagination -->
           <div class="justify-center">
             <UPagination v-model:page="currentPage" :total="filteredCars.length" :to="to" :sibling-count="1" show-edges
@@ -93,14 +141,26 @@
 <script setup>
 import Loading from '../components/Loading.vue';
 import ListModel from '../components/deals/ListModel.vue';
+import CarResultsModal from '../components/deals/CarResultsModal.vue';
 import { useBDealsFunctions } from '~/composables/useBDealsFunctions';
 import { UInput } from '#components';
 const {
+  mPercent,
+  openModal,
+  isModalOpen,
+  selectedCar,
+  resLaCentrale,
+  resAutoScout,
+  relatedCars,
+  domain,
+        cutOffPrice,
+        reloadPage,
         loadingCars,
         title,
         searchTerm,
         selectedColors,
         selectedModels,
+        selectedDeals,
         currentPage,
         itemsPerPage,
         cars,
@@ -108,24 +168,14 @@ const {
         getAllCars,
         availableColors,
         availableModels,
+        availableDeals,
         filteredCars,
         pageCount,
         paginatedCars,
-        to
+        to,
     } = useBDealsFunctions();
 definePageMeta({
   middleware: ["auth"]
-})
-
-const route = useRoute()
-const domain = computed(() => route.query.domain)
-
-// 
-watchEffect(() => {
-  if (domain.value) {
-    console.log("Domain reçu :", domain.value)
-    getAllCars(domain.value);
-  }
 })
 
 </script>

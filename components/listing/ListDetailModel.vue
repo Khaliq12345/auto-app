@@ -12,8 +12,9 @@
               </template>
   
               <div class="flex space-x-3">
+                <!-- :src="!isImageUrlSimple(voiture.image[0]) || voiture.image.length == 0 ? `https://placehold.co/100x100?text=${encodeURIComponent(voiture.name)}` : voiture.image[0]" -->
                 <img
-                  :src="!isImageUrlSimple(voiture.image[0]) || voiture.image.length == 0 ? `https://placehold.co/100x100?text=${encodeURIComponent(voiture.name)}` : voiture.image[0]"
+                :src="!isImageUrlSimple(voiture.image) ? `https://placehold.co/100x100?text=${encodeURIComponent(voiture.name)}` : voiture.image"
                   alt="Car image"
                   class="w-full h-30 object-cover rounded-lg"
                 />
@@ -21,26 +22,26 @@
                 <div class="text-sm text-start self-center w-full">
                   <ul>
                     <li>
-                      <UIcon size="20" name="i-heroicons-user-group" class="text-rose-500" />
+                      <UIcon size="20" name="i-heroicons-user-group" class="text-rose-500 mx-auto align-sub " />
                       {{ voiture.deal_type }}
                     </li>
                     <li>
-                      <UIcon size="20" name="i-heroicons-arrow-trending-up" class="text-rose-500" />
+                      <UIcon size="20" name="i-heroicons-arrow-trending-up" class="text-rose-500 mx-auto align-sub " />
                       {{ voiture.mileage }} km
                     </li>
                     <li>
-                      <UIcon size="20" name="i-heroicons-currency-dollar" class="text-rose-500" />
+                      <UIcon size="20" name="i-heroicons-currency-dollar" class="text-rose-500 mx-auto align-sub " />
                       {{ voiture.price }} €
                     </li>
                     <li>
-                      <UIcon size="20" name="i-heroicons-wrench-screwdriver" class="text-rose-500" />
+                      <UIcon size="20" name="i-heroicons-wrench-screwdriver" class="text-rose-500 mx-auto align-sub " />
                       {{ voiture.fuel_type }} -- {{ voiture.boite_de_vitesse }}
                     </li>
                   </ul>
                 </div>
               </div>
   
-              <div class="flex justify-between mt-2">
+              <div class="flex justify-between gap-x-3 mt-2">
                 <p>{{ voiture.car_metadata }}</p>
                 <a :href="voiture.link" target="_blank" rel="noopener noreferrer">
                   <UIcon size="15" name="i-heroicons-link" class="text-rose-500" /> Link

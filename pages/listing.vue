@@ -94,17 +94,38 @@
               Filters
             </div>
             <template #content>
-              <div class="grid  grid-cols-2 gap-4 py-5 text-center ">
-                <UFormField>
-                  <USelect v-model="selectedColors" icon="i-heroicons-paint-brush" :items="availableColors" multiple
-                    clearable :placeholder="availableColors.length ? 'By color' : 'No Available Color'">
-                  </USelect>
-                </UFormField>
-                <UFormField>
-                  <USelect v-model="selectedModels" icon="i-heroicons-swatch" :items="availableModels" multiple
-                    clearable :placeholder="availableModels.length ? 'By model' : 'No Available Model'" />
-                </UFormField>
+              <div class="text-center" >
+                <span class=" text-xs font-bold">Cut Off Price</span>
+                <div class="text-center place-self-center mt-2">
+                  <UButtonGroup class="mb-4 ">
+                    <UInput size="lg" v-model="cutOffPrice" type="number" placeholder="" icon="i-heroicons-currency-dollar"
+                      class="w-30 justify-center"/>
+                    <UButton :disabled="!cutOffPrice" :loading="loadingCars" @click="reloadPage" label="Reload" color="primary"
+                      icon="i-heroicons-arrow-path" />
+                  </UButtonGroup>
+                </div>
+
+
+
+                <div class="grid  grid-cols-3 gap-4 py-5 text-center ">
+                  <UFormField>
+                    <USelect v-model="selectedColors" icon="i-heroicons-paint-brush" :items="availableColors" multiple
+                      clearable :placeholder="availableColors.length ? 'By color' : 'No Available Color'">
+                    </USelect>
+                  </UFormField>
+                  <UFormField>
+                    <USelect v-model="selectedModels" icon="i-heroicons-swatch" :items="availableModels" multiple
+                      clearable :placeholder="availableModels.length ? 'By model' : 'No Available Model'" />
+                  </UFormField>
+                  <UFormField>
+                    <USelect v-model="selectedDeals" icon="i-heroicons-sparkles" :items="availableDeals" multiple
+                      clearable :placeholder="availableDeals.length ? 'By Deals' : 'No Available Option'">
+                    </USelect>
+                  </UFormField>
+                </div>
+
               </div>
+
             </template>
           </UCollapsible>
           <!-- Main Listing -->
@@ -154,7 +175,53 @@ import ScrapStatusModal from '../components/listing/ScrapStatusModal.vue';
 import CarResultsModal from '../components/listing/CarResultsModal.vue';
 import { useListingFunctions } from '~/composables/useListingFunctions';
 import { UInput } from '#components';
-const { loadingCars, globalLoading, isStatusModalOpen, scrapStarted, lastScrap, scrapStatus, totalToProcess, alreadyProcessed, title, isModalOpen, selectedCar, relatedCars, resLaCentrale, resAutoScout, searchTerm, selectedColors, selectedModels, currentPage, itemsPerPage, cars, file, isImporting, uploadProgress, importError, importSuccess, handleLogout, getAllCars, getCarComparisons, startScrapping, seeStatus, availableColors, availableModels, filteredCars, pageCount, paginatedCars, openModal, to, handleFileChange, importFile } = useListingFunctions();
+
+const
+  {
+    cutOffPrice,
+    reloadPage,
+    loadingCars,
+    globalLoading,
+    isStatusModalOpen,
+    scrapStarted,
+    lastScrap,
+    scrapStatus,
+    totalToProcess,
+    alreadyProcessed,
+    title,
+    isModalOpen,
+    selectedCar,
+    relatedCars,
+    resLaCentrale,
+    resAutoScout,
+    searchTerm,
+    selectedColors,
+    selectedModels,
+    selectedDeals,
+    currentPage,
+    itemsPerPage,
+    cars,
+    file,
+    isImporting,
+    uploadProgress,
+    importError,
+    importSuccess,
+    handleLogout,
+    getAllCars,
+    getCarComparisons,
+    startScrapping,
+    seeStatus,
+    availableColors,
+    availableModels,
+    availableDeals,
+    filteredCars,
+    pageCount,
+    paginatedCars,
+    openModal,
+    to,
+    handleFileChange,
+    importFile
+  } = useListingFunctions();
 definePageMeta({
   middleware: ["auth"]
 })
@@ -181,5 +248,7 @@ const menuItems = ref([
       }
     ]
   },
-]) 
+])
+
+
 </script>
