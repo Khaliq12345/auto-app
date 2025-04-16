@@ -103,6 +103,8 @@ export function useBDealsFunctions() {
             const modelMatch = selectedModels.value.length ? selectedModels.value.includes(car.make) : true;
             const dealMatch = selectedDeals.value.length ? selectedDeals.value.includes(car.card_color) : true;
 
+            currentPage.value = 1
+
             return searchMatch && colorMatch && modelMatch && dealMatch;
         });
     });
