@@ -16,6 +16,7 @@ const { showToast } = useNotifications();
 
 
         const handleLogin = async () => {
+          console.log('is linging in')
     
       isLoading.value = true
       error.value = ''

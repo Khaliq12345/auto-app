@@ -1,5 +1,5 @@
 <template>
-  <UCard :ui="{ rounded: 'lg', shadow: 'md' }" :class="`text-white opacity-80 shadow-lg hover:shadow-xl transition-shadow duration-300 `"
+  <UCard :ui="{ rounded: 'lg', shadow: 'md' }" :class="`text-black opacity-80 shadow-lg hover:shadow-xl transition-shadow duration-300 `"
   :style="`background-color: ${car.card_color}`">
     <template #header>
       <div class="flex items-center justify-between">
