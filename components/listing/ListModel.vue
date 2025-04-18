@@ -1,7 +1,7 @@
 <template>
-    <UCard :ui="{ rounded: 'lg', shadow: 'md' }" :class="`text-black opacity-80 shadow-lg hover:shadow-xl transition-shadow duration-300 `"
-    :style="`background-color: ${car.card_color== 'red' ? '#fca5a5' : car.card_color== 'green' ? '#86efac' : 'fde047'}`">
-      <template #header>
+    <UCard :ui="{ rounded: 'lg', shadow: 'md' }" :class="`text-black shadow-lg hover:shadow-xl transition-shadow duration-300 `"
+    :style="`background-color: ${car.card_color== 'red' ? '#f87171' : car.card_color== 'green' ? '#86efac' : 'fde047'}`">
+    <template #header>
         <div class="flex items-center justify-between">
           <div class="flex items-center space-x-4">
             <UAvatar
