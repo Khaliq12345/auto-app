@@ -28,19 +28,19 @@
         <h2 class=" font-semibold"> <span class="font-bold">Model :</span> {{ car.model }}</h2>
         <p class=""></p>
         <p class="text-sm  mt-2">
-          <UIcon size="20" name="i-heroicons-paint-brush" class="mx-auto align-sub text-warning-500" />
+          <UIcon size="20" name="i-heroicons-paint-brush" class="mx-auto align-sub text-warning-800" />
           Color : {{ car.color }}  -- • -- 
-          <UIcon size="20" name="i-heroicons-arrow-trending-up" class="mx-auto align-sub text-warning-500" />
+          <UIcon size="20" name="i-heroicons-arrow-trending-up" class="mx-auto align-sub text-warning-800" />
           Mileage : {{ car.mileage }} km -- • -- 
-          <UIcon size="20" name="i-heroicons-wrench-screwdriver" class="mx-auto align-sub text-primary-500" />
+          <UIcon size="20" name="i-heroicons-wrench-screwdriver" class="mx-auto align-sub text-warning-800" />
           {{ car.fuel_type }}
         </p>
         <p class="text-sm  mt-2 ">
-          <UIcon size="20" name="i-heroicons-currency-dollar" class="mx-auto align-sub text-warning-500" />
+          <UIcon size="20" name="i-heroicons-currency-dollar" class="mx-auto align-sub text-warning-800" />
           Original Without Tax : <span :class="!bestMatchingCar ? '' : bestMatchingCar && car.price_with_no_tax <= bestMatchingCar.price ? 'text-green-600' : 'text-red-200' "> {{ car.price_with_no_tax.toFixed(2) }} </span>  
         </p>
         <p class="text-sm  mt-2 ">
-          <UIcon size="20" name="i-heroicons-currency-dollar" class="mx-auto align-sub text-warning-500" />
+          <UIcon size="20" name="i-heroicons-currency-dollar" class="mx-auto align-sub text-warning-800" />
           Original With Tax : <span :class="!bestMatchingCar ? '' : bestMatchingCar && car.price_with_tax <= bestMatchingCar.price ? 'text-green-600' : 'text-red-200' "> {{ car.price_with_tax.toFixed(2) }} </span>  
         </p>
         
@@ -52,7 +52,7 @@
     </div>
     <div v-if="bestMatchingCar" class="text-center flex justify-center gap-x-3 w-100 mt-2">
       <span class="text-sm  mb-4">
-        <UIcon size="20" name="i-heroicons-sparkles" class="mx-auto align-sub text-warning-500" />
+        <UIcon size="20" name="i-heroicons-sparkles" class="mx-auto align-sub text-warning-800" />
         Best Matching : {{ bestMatchingCar.matching_percentage.toFixed(2) }} %
       </span>
       <a :href="bestMatchingCar.link" target="_blank" rel="noopener noreferrer" class="text-sm ">
@@ -61,13 +61,13 @@
     </div>
     <div v-else class="text-center flex justify-center gap-x-3 w-100">
       <span class="text-sm  mb-4">
-        <UIcon size="20" name="i-heroicons-sparkles" class="mx-auto align-sub text-warning-500" />
+        <UIcon size="20" name="i-heroicons-sparkles" class="mx-auto align-sub text-warning-800" />
         No Best Matching !
       </span>
     </div>
 
     <div class="text-center md:text-end">
-      <UButton label="View Details" icon="i-heroicons-eye" class="w-52 justify-center" @click="$emit('view', car)" />
+      <UButton label="View Details" icon="i-heroicons-eye" class="w-52 justify-center bg-warning-500" @click="$emit('view', car)" />
     </div>
   </UCard>
 
