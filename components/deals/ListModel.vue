@@ -11,54 +11,52 @@
             <p class="">ID : {{ car.id }}</p>
           </div>
         </div>
-        <!-- <UButton label="" icon="i-heroicons-information-circle" @click="$emit('view', car)" /> -->
+        <a :href="car.car_url" target="_blank" rel="noopener noreferrer" class="text-sm ">
+                  <UIcon size="15" name="i-heroicons-link" class=" " /> Car Link
+                </a>
       </div>
     </template>
 
     <div class="flex flex-col md:flex-row gap-4 mb-2">
 
       <div class="flex-1 ">
-        <h2 v-if="!bestMatchingCar" class="text-xl text-center mb-2 font-bold text-warning-500">No deals found with
+        <h2 v-if="!bestMatchingCar" class="text-xl text-center mb-2 font-bold text-warning-200">No deals found with
           {{ mPercent }} % matching </h2>
         <h2 v-if="bestMatchingCar && car.price <= bestMatchingCar.price"
-          class="text-xl text-center mb-2 font-bold text-green-500">Original Price is Cheaper</h2>
-        <h2 v-if="bestMatchingCar && car.price > bestMatchingCar.price" class="text-xl text-center mb-2 font-bold text-red-500">Original Price is more Expensive </h2>
+          class="text-xl text-center mb-2 font-bold text-green-600">Original Price is Cheaper</h2>
+        <h2 v-if="bestMatchingCar && car.price > bestMatchingCar.price" class="text-xl text-center mb-2 font-bold text-red-200">Original Price is more Expensive </h2>
         <h2 class=" font-semibold"> <span class="font-bold">Model :</span> {{ car.model }}</h2>
         <p class=""></p>
         <p class="text-sm  mt-2">
           <UIcon size="20" name="i-heroicons-paint-brush" class="mx-auto align-sub text-warning-500" />
           Color : {{ car.color }}  -- • -- 
           <UIcon size="20" name="i-heroicons-arrow-trending-up" class="mx-auto align-sub text-warning-500" />
-          Mileage : {{ car.mileage }} km
+          Mileage : {{ car.mileage }} km -- • -- 
+          <UIcon size="20" name="i-heroicons-wrench-screwdriver" class="mx-auto align-sub text-primary-500" />
+          {{ car.fuel_type }}
         </p>
         <p class="text-sm  mt-2 ">
           <UIcon size="20" name="i-heroicons-currency-dollar" class="mx-auto align-sub text-warning-500" />
-          Original Price : <span :class="!bestMatchingCar ? '' : bestMatchingCar && car.price <= bestMatchingCar.price ? 'text-green-500' : 'text-red-500' "> {{ car.price.toFixed(2) }} </span>  
+          Original Without Tax : <span :class="!bestMatchingCar ? '' : bestMatchingCar && car.price_with_no_tax <= bestMatchingCar.price ? 'text-green-600' : 'text-red-200' "> {{ car.price_with_no_tax.toFixed(2) }} </span>  
         </p>
-        <!-- <p class="text-sm  mt-2">
-            <UIcon size="20" name="i-heroicons-currency-dollar" class="mx-auto align-sub text-warning-500" />
-            Average Price : {{ car.average_price.toFixed(2) }}
-          </p>
-          <p class="text-sm  mt-2 mb-2">
-            <UIcon size="20" name="i-heroicons-currency-dollar" class="mx-auto align-sub text-warning-500" />
-            Lowest Price : {{ car.lowest_price.toFixed(2) }}
-          </p> -->
-        <p class="text-sm  mt-2 mb-2">
-          <UIcon size="20" name="i-heroicons-wrench-screwdriver" class="mx-auto align-sub text-warning-500" />
-          Fuel Type : {{ car.fuel_type }}
+        <p class="text-sm  mt-2 ">
+          <UIcon size="20" name="i-heroicons-currency-dollar" class="mx-auto align-sub text-warning-500" />
+          Original With Tax : <span :class="!bestMatchingCar ? '' : bestMatchingCar && car.price_with_tax <= bestMatchingCar.price ? 'text-green-600' : 'text-red-200' "> {{ car.price_with_tax.toFixed(2) }} </span>  
         </p>
+        
+       
 
 
       </div>
 
     </div>
-    <div v-if="bestMatchingCar" class="text-center flex justify-center gap-x-3 w-100 ">
+    <div v-if="bestMatchingCar" class="text-center flex justify-center gap-x-3 w-100 mt-2">
       <span class="text-sm  mb-4">
         <UIcon size="20" name="i-heroicons-sparkles" class="mx-auto align-sub text-warning-500" />
         Best Matching : {{ bestMatchingCar.matching_percentage.toFixed(2) }} %
       </span>
-      <a :href="bestMatchingCar.link" target="_blank" rel="noopener noreferrer">
-                  <UIcon size="15" name="i-heroicons-link" class="text-blue-500" /> Link
+      <a :href="bestMatchingCar.link" target="_blank" rel="noopener noreferrer" class="text-sm ">
+                  <UIcon size="15" name="i-heroicons-link" class="text-blue-500 " /> Best Match Link
                 </a>
     </div>
     <div v-else class="text-center flex justify-center gap-x-3 w-100">
