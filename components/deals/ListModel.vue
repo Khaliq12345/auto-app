@@ -82,9 +82,21 @@ const props = defineProps({
   mPercent: Number,
 })
 
-const bestMatchingCar = computed(() => {
-  return props.car.comparisons?.find(caro => caro.matching_percentage >= props.mPercent) || null
+// Référence pour stocker la valeur qui ne doit pas changer
+const bestMatchingCar = ref(null)
+
+// Calcul initial au montage
+onMounted(() => {
+  bestMatchingCar.value = props.car.comparisons?.find(caro => 
+    caro.matching_percentage >= props.mPercent
+  ) || null
 })
+
+// const bestMatchingCar = props.car.comparisons?.find(caro => caro.matching_percentage >= props.mPercent) || null;
+
+// const bestMatchingCar = computed(() => {
+//   return props.car.comparisons?.find(caro => caro.matching_percentage >= props.mPercent) || null
+// })
 
 defineEmits(['view'])
 </script>

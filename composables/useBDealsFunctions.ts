@@ -61,6 +61,7 @@ export function useBDealsFunctions() {
                         refresh_token: refToken,
                         // page : 4,
                         cut_off_price: cutOffPrice.value,
+                        percentage_limit: mPercent.value,
                         domain: domainVar,
                         limit: 250
                     },

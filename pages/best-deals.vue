@@ -9,21 +9,23 @@
             <div class="flex justify-between items-center">
               <div>
                 <h1 class="text-3xl font-bold ">Find Best Deals !</h1>
-                <p class="text-gray-500 mt-1">From <ULink :to="domain" target="_blank" class="text-blue-500 font-bold" >{{ domain == 'https://www.autoscout24.fr/' ? 'AutoScout24' : 'La Centrale' }}</ULink> </p>
+                <p class="text-gray-500 mt-1">From <ULink :to="domain" target="_blank" class="text-blue-500 font-bold">
+                    {{ domain == 'https://www.autoscout24.fr/' ? 'AutoScout24' : 'La Centrale' }}</ULink>
+                </p>
               </div>
               <div class="text-end">
-                <ULink to="/listing"  class="" >
-              <UButton color="gray" variant="ghost" icon="i-heroicons-arrow-uturn-left" @click=""
-                class=" cursor-pointer">
-                Back
-              </UButton>
-            </ULink>
-              <UButton color="gray" variant="ghost" icon="i-heroicons-arrow-left-end-on-rectangle" @click="handleLogout"
-                class="text-error-500 cursor-pointer">
-                Log Out
-              </UButton>
+                <ULink to="/listing" class="">
+                  <UButton color="gray" variant="ghost" icon="i-heroicons-arrow-uturn-left" @click=""
+                    class=" cursor-pointer">
+                    Back
+                  </UButton>
+                </ULink>
+                <UButton color="gray" variant="ghost" icon="i-heroicons-arrow-left-end-on-rectangle"
+                  @click="handleLogout" class="text-error-500 cursor-pointer">
+                  Log Out
+                </UButton>
               </div>
-             
+
             </div>
           </template>
           <div class="">
@@ -52,32 +54,34 @@
               Filters
             </div>
             <template #content>
-              <div class="text-center" >
+              <div class="text-center">
                 <div class="grid  grid-cols-2 gap-4 py-5 text-center ">
                   <div class="">
                     <span class=" text-xs font-bold">Cut Off Price</span>
-                <div class="text-center place-self-center mt-2">
-                  <UButtonGroup class="mb-4 ">
-                    <UInput size="lg" v-model="cutOffPrice" type="number" placeholder="" icon="i-heroicons-currency-dollar"
-                      class="w-30 justify-center"/>
-                    <UButton :disabled="!cutOffPrice" :loading="loadingCars" @click="reloadPage" label="Reload" color="primary"
-                      icon="i-heroicons-arrow-path" />
-                  </UButtonGroup>
-                </div>
+                    <div class="text-center place-self-center mt-2">
+                      <UButtonGroup class="mb-4 ">
+                        <UInput size="lg" v-model="cutOffPrice" type="number" placeholder=""
+                          icon="i-heroicons-currency-dollar" class="w-30 justify-center" />
+                        <UButton :disabled="!cutOffPrice" :loading="loadingCars" @click="reloadPage" :label="loadingCars? 'Loading' : 'Reload'"
+                          color="primary" icon="i-heroicons-arrow-path" />
+                      </UButtonGroup>
+                    </div>
                   </div>
                   <!--  -->
                   <div class="">
                     <span class=" text-xs font-bold">Matching Percent</span>
-                <div class="text-center place-self-center mt-2">
-                  <UButtonGroup class="mb-4 ">
-                    <UInput size="lg" v-model="mPercent" type="number" placeholder="" icon="i-heroicons-percent-badge"
-                      class="w-30 justify-center"/>
-                    <UButton :disabled="true" label=" % " color="primary" />
-                  </UButtonGroup>
-                </div>
+                    <div class="text-center place-self-center mt-2">
+                      <UButtonGroup class="mb-4 ">
+                        <UInput size="lg" v-model="mPercent" type="number" placeholder=""
+                          icon="i-heroicons-percent-badge" min="0" max="100" class="w-30 justify-center" />
+                          <UButton :disabled="!mPercent" :loading="loadingCars" @click="reloadPage" :label="loadingCars? 'Loading' : 'Reload'"
+                          color="primary" icon="i-heroicons-arrow-path" />
+                        <!-- <UButton :disabled="true" label=" % " color="primary" /> -->
+                      </UButtonGroup>
+                    </div>
                   </div>
                 </div>
-                
+
 
 
 
@@ -118,11 +122,11 @@
           </div>
           <div v-if="!loadingCars && cars.length != 0" class="grid grid-cols-1 lg:grid-cols-2 gap-4">
             <div v-for="car in paginatedCars" :key="car.id" class="relative">
-              <ListModel :key="car.id" :car="car" :mPercent="mPercent" @view="openModal"/>
+              <ListModel :key="car.id" :car="car" :mPercent="mPercent" @view="openModal" />
             </div>
           </div>
           <!-- Others -->
-           <!-- Modal For Details -->
+          <!-- Modal For Details -->
           <CarResultsModal v-model="isModalOpen" :selectedCar="selectedCar" :resLaCentrale="resLaCentrale"
             :resAutoScout="resAutoScout" :relatedCars="relatedCars" />
           <!-- Pagination -->
@@ -153,27 +157,27 @@ const {
   resAutoScout,
   relatedCars,
   domain,
-        cutOffPrice,
-        reloadPage,
-        loadingCars,
-        title,
-        searchTerm,
-        selectedColors,
-        selectedModels,
-        selectedDeals,
-        currentPage,
-        itemsPerPage,
-        cars,
-        handleLogout,
-        getAllCars,
-        availableColors,
-        availableModels,
-        availableDeals,
-        filteredCars,
-        pageCount,
-        paginatedCars,
-        to,
-    } = useBDealsFunctions();
+  cutOffPrice,
+  reloadPage,
+  loadingCars,
+  title,
+  searchTerm,
+  selectedColors,
+  selectedModels,
+  selectedDeals,
+  currentPage,
+  itemsPerPage,
+  cars,
+  handleLogout,
+  getAllCars,
+  availableColors,
+  availableModels,
+  availableDeals,
+  filteredCars,
+  pageCount,
+  paginatedCars,
+  to,
+} = useBDealsFunctions();
 definePageMeta({
   middleware: ["auth"]
 })

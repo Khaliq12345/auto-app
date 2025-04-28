@@ -94,17 +94,33 @@
               Filters
             </div>
             <template #content>
-              <div class="text-center" >
-                <span class=" text-xs font-bold">Cut Off Price</span>
-                <div class="text-center place-self-center mt-2">
-                  <UButtonGroup class="mb-4 ">
-                    <UInput size="lg" v-model="cutOffPrice" type="number" placeholder="" icon="i-heroicons-currency-dollar"
-                      class="w-30 justify-center"/>
-                    <UButton :disabled="!cutOffPrice" :loading="loadingCars" @click="reloadPage" label="Reload" color="primary"
-                      icon="i-heroicons-arrow-path" />
-                  </UButtonGroup>
+              <div class="text-center">
+                <div class="grid  grid-cols-2 gap-4 py-5 text-center ">
+                  <div class="">
+                    <span class=" text-xs font-bold">Cut Off Price</span>
+                    <div class="text-center place-self-center mt-2">
+                      <UButtonGroup class="mb-4 ">
+                        <UInput size="lg" v-model="cutOffPrice" type="number" placeholder=""
+                          icon="i-heroicons-currency-dollar" class="w-30 justify-center" />
+                        <UButton :disabled="!cutOffPrice" :loading="loadingCars" @click="reloadPage" :label="loadingCars? 'Loading' : 'Reload'"
+                          color="primary" icon="i-heroicons-arrow-path" />
+                      </UButtonGroup>
+                    </div>
+                  </div>
+                  <!--  -->
+                  <div class="">
+                    <span class=" text-xs font-bold">Matching Percent</span>
+                    <div class="text-center place-self-center mt-2">
+                      <UButtonGroup class="mb-4 ">
+                        <UInput size="lg" v-model="mPercent" type="number" placeholder=""
+                          icon="i-heroicons-percent-badge" min="0" max="100" class="w-30 justify-center" />
+                          <UButton :disabled="!mPercent" :loading="loadingCars" @click="reloadPage" :label="loadingCars? 'Loading' : 'Reload'"
+                          color="primary" icon="i-heroicons-arrow-path" />
+                        <!-- <UButton :disabled="true" label=" % " color="primary" /> -->
+                      </UButtonGroup>
+                    </div>
+                  </div>
                 </div>
-
 
 
                 <div class="grid  grid-cols-3 gap-4 py-5 text-center ">
@@ -178,6 +194,7 @@ import { UInput } from '#components';
 
 const
   {
+    mPercent,
     cutOffPrice,
     reloadPage,
     loadingCars,

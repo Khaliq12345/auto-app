@@ -25,6 +25,7 @@ export function useListingFunctions() {
     const resAutoScout = ref();
     const searchTerm = ref('');
     const cutOffPrice = ref(500);
+    const mPercent = ref(95);
     const selectedColors = ref<any[]>([]);
     const selectedModels = ref<any[]>([]);
     const selectedDeals = ref<any[]>([]);
@@ -63,6 +64,7 @@ export function useListingFunctions() {
                         refresh_token: refToken,
                         // page : 4,
                         cut_off_price: cutOffPrice.value,
+                        percentage_limit: mPercent.value,
                         domain: '',
                         limit: 250
                     },
@@ -291,7 +293,7 @@ export function useListingFunctions() {
 
     onMounted(() => {
         getAllCars();
-        setupMyInterval(seeStatus, 10000);
+        setupMyInterval(seeStatus, 20000);
     });
 
     onUnmounted(() => {
@@ -302,6 +304,7 @@ export function useListingFunctions() {
     });
 
     return {
+        mPercent,
         cutOffPrice,
         reloadPage,
         loadingCars,
