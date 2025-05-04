@@ -139,6 +139,7 @@ export function useListingFunctions() {
                     params: {
                         access_token: accessToken,
                         refresh_token: refToken,
+                        dev: false,
                         mileage_plus_minus: mileagePlusMinus.value
                     },
                     headers: {
