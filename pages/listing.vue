@@ -95,7 +95,8 @@
             </div>
             <template #content>
               <div class="text-center">
-                <div class="grid  grid-cols-2 gap-4 py-5 text-center ">
+                <div class="grid  grid-cols-3 gap-4 py-5 text-center ">
+                  <!-- Cut Off Price -->
                   <div class="">
                     <span class=" text-xs font-bold">Cut Off Price</span>
                     <div class="text-center place-self-center mt-2">
@@ -107,7 +108,7 @@
                       </UButtonGroup>
                     </div>
                   </div>
-                  <!--  -->
+                  <!-- Matching Percent -->
                   <div class="">
                     <span class=" text-xs font-bold">Matching Percent</span>
                     <div class="text-center place-self-center mt-2">
@@ -115,6 +116,19 @@
                         <UInput size="lg" v-model="mPercent" type="number" placeholder=""
                           icon="i-heroicons-percent-badge" min="0" max="100" class="w-30 justify-center" />
                           <UButton :disabled="!mPercent" :loading="loadingCars" @click="reloadPage" :label="loadingCars? 'Loading' : 'Reload'"
+                          color="primary" icon="i-heroicons-arrow-path" />
+                        <!-- <UButton :disabled="true" label=" % " color="primary" /> -->
+                      </UButtonGroup>
+                    </div>
+                  </div>
+                  <!-- Mileage P M -->
+                  <div class="">
+                    <span class=" text-xs font-bold">Mileage +-</span>
+                    <div class="text-center place-self-center mt-2">
+                      <UButtonGroup class="mb-4 ">
+                        <UInput size="lg" v-model="mileagePlusMinus" type="number" placeholder=""
+                          icon="i-heroicons-lifebuoy" min="0"  class="w-30 justify-center" />
+                          <UButton :disabled="!mileagePlusMinus" @click="startScrapping" label="Restart Scraping"
                           color="primary" icon="i-heroicons-arrow-path" />
                         <!-- <UButton :disabled="true" label=" % " color="primary" /> -->
                       </UButtonGroup>
@@ -194,6 +208,7 @@ import { UInput } from '#components';
 
 const
   {
+    mileagePlusMinus,
     mPercent,
     cutOffPrice,
     reloadPage,

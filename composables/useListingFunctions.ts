@@ -26,6 +26,7 @@ export function useListingFunctions() {
     const searchTerm = ref('');
     const cutOffPrice = ref(500);
     const mPercent = ref(95);
+    const mileagePlusMinus = ref(10000);
     const selectedColors = ref<any[]>([]);
     const selectedModels = ref<any[]>([]);
     const selectedDeals = ref<any[]>([]);
@@ -137,7 +138,8 @@ export function useListingFunctions() {
                 {
                     params: {
                         access_token: accessToken,
-                        refresh_token: refToken
+                        refresh_token: refToken,
+                        mileage_plus_minus: mileagePlusMinus.value
                     },
                     headers: {
                         "accept": "application/json",
@@ -304,6 +306,7 @@ export function useListingFunctions() {
     });
 
     return {
+        mileagePlusMinus,
         mPercent,
         cutOffPrice,
         reloadPage,
