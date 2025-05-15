@@ -5,6 +5,9 @@ import { useNotifications } from '~/utils/globals';
 export function useListingFunctions() {
     // Globals
     const router = useRouter();
+    const devMode = ref('true');
+    const ignoreOld = ref('true');
+    const sitesToScrap = ref(['autoscout24', 'lacentrale']);
     const loadingCars = ref(false);
     const globalLoading = ref(false);
     const isStatusModalOpen = ref(false);
@@ -45,7 +48,7 @@ export function useListingFunctions() {
         getAllCars()
         // window.location.reload()
         // navigateTo(route.fullPath, { replace: true })
-      }
+    }
     const handleLogout = async () => {
         // Supprimer les informations de session
         sessionStorage.removeItem('AccessToken');
@@ -134,17 +137,20 @@ export function useListingFunctions() {
         const accessToken = sessionStorage.getItem('AccessToken');
         const refToken = sessionStorage.getItem('RefreshToken');
         try {
-            const response = await axios.get(urlAPI + "/start_scraping",
+            const params = {
+                access_token: accessToken,
+                refresh_token: refToken,
+                ignore_old: ignoreOld.value == 'true' ? true : false,
+                dev: devMode.value == 'true' ? true : false,
+                mileage_plus_minus: mileagePlusMinus.value
+            }
+            console.log(params)
+            const response = await axios.post(urlAPI + "/start_scraping", sitesToScrap.value,
                 {
-                    params: {
-                        access_token: accessToken,
-                        refresh_token: refToken,
-                        dev: false,
-                        mileage_plus_minus: mileagePlusMinus.value
-                    },
+                    params: params,
                     headers: {
-                        "accept": "application/json",
-                        "content-type": "application/x-www-form-urlencoded",
+                        'Accept': 'application/json',
+                        'Content-Type': 'application/json'
                     },
                 },
             );
@@ -188,7 +194,7 @@ export function useListingFunctions() {
             totalToProcess.value = response.data.details.data[0].total_running;
             alreadyProcessed.value = response.data.details.data[0].total_completed;
             scrapStatus.value = (alreadyProcessed.value * 100 / totalToProcess.value).toFixed(2) + ' %';
-            lastScrap.value = response.data.details.data[0].stopped_at??'- - -';
+            lastScrap.value = response.data.details.data[0].stopped_at ?? '- - -';
             // Stocker l'access token dans la session du navigateur
             sessionStorage.setItem('AccessToken', response.data.session.session.access_token);
             sessionStorage.setItem('RefreshToken', response.data.session.session.refresh_token);
@@ -207,7 +213,7 @@ export function useListingFunctions() {
     // 
     const availableColors = computed(() => cars.value ? [...new Set(cars.value.map(car => car.color))].filter(Boolean).map(color => ({ label: color, value: color })) : []);
     const availableModels = computed(() => cars.value ? [...new Set(cars.value.map(car => car.make))].filter(Boolean).map(model => ({ label: model, value: model })) : []);
-    const availableDeals = computed(() => cars.value ? [...new Set(cars.value.map(car => car.card_color))].filter(Boolean).map(card_color => ({ label: card_color == 'red' ? 'Worst Deals' : card_color == 'green' ?  'Best Deals' : 'Not Bads', value: card_color })) : []);
+    const availableDeals = computed(() => cars.value ? [...new Set(cars.value.map(car => car.card_color))].filter(Boolean).map(card_color => ({ label: card_color == 'red' ? 'Worst Deals' : card_color == 'green' ? 'Best Deals' : 'Not Bads', value: card_color })) : []);
     const filteredCars = computed(() => {
         return cars.value.filter(car => {
             const searchMatch = searchTerm.value ?
@@ -307,6 +313,9 @@ export function useListingFunctions() {
     });
 
     return {
+        devMode,
+        ignoreOld,
+        sitesToScrap,
         mileagePlusMinus,
         mPercent,
         cutOffPrice,

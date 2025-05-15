@@ -67,8 +67,40 @@
               }" close-icon="i-heroicons-x-mark" icon="i-heroicons-check-badge" :ui="{
                 icon: 'size-12'
               }" />
-              <div v-if="importSuccess" class="justify-end flex">
-                <UButton v-if="!scrapStarted" label="Start Scrapping" icon="i-heroicons-chevron-double-right"
+              <div class="grid  grid-cols-3 gap-4 py-2 text-center ">
+                <!-- Dev or Not -->
+                 <div class="">
+                    <span class=" text-xs font-bold">Dev Mode</span>
+                    <div class="text-center place-self-center mt-2">
+                      <UFormField>
+                        <USelect v-model="devMode" :items="['true', 'false']" class="w-50" />
+                      </UFormField>
+                    </div>
+                  </div>
+                
+                <!-- Ignore Old -->
+                 <div class="">
+                    <span class=" text-xs font-bold">Ignore Old</span>
+                    <div class="text-center place-self-center mt-2">
+                      <USelect v-model="ignoreOld"  :items="['true', 'false']" class="w-50" />
+                    </div>
+                  </div>
+                
+                <!-- Sites To Scrap -->
+                 <div class="">
+                    <span class=" text-xs font-bold">Sites to Scrap</span>
+                    <div class="text-center place-self-center mt-2">
+                      <UFormField>
+                  <USelect v-model="sitesToScrap" multiple :items="['autoscout24', 'lacentrale']" class="w-50" />
+                </UFormField>
+                    </div>
+                  </div>
+                
+              </div>
+              <!-- <div v-if="importSuccess" class="justify-end flex"> -->
+              <!-- Start Scraping -->
+              <div class="justify-end flex mt-3">
+                <UButton  label="Start Scrapping" icon="i-heroicons-chevron-double-right"
                   class="justify-center" @click="startScrapping" color="info" />
                 <!-- <UButton v-if="scrapStarted" label="Check Status" icon="i-heroicons-eye" class=" justify-center"
                   @click="seeStatus" color="warning" /> -->
@@ -103,8 +135,8 @@
                       <UButtonGroup class="mb-4 ">
                         <UInput size="lg" v-model="cutOffPrice" type="number" placeholder=""
                           icon="i-heroicons-currency-dollar" class="w-30 justify-center" />
-                        <UButton :disabled="!cutOffPrice" :loading="loadingCars" @click="reloadPage" :label="loadingCars? 'Loading' : 'Reload'"
-                          color="primary" icon="i-heroicons-arrow-path" />
+                        <UButton :disabled="!cutOffPrice" :loading="loadingCars" @click="reloadPage"
+                          :label="loadingCars ? 'Loading' : 'Reload'" color="primary" icon="i-heroicons-arrow-path" />
                       </UButtonGroup>
                     </div>
                   </div>
@@ -115,8 +147,8 @@
                       <UButtonGroup class="mb-4 ">
                         <UInput size="lg" v-model="mPercent" type="number" placeholder=""
                           icon="i-heroicons-percent-badge" min="0" max="100" class="w-30 justify-center" />
-                          <UButton :disabled="!mPercent" :loading="loadingCars" @click="reloadPage" :label="loadingCars? 'Loading' : 'Reload'"
-                          color="primary" icon="i-heroicons-arrow-path" />
+                        <UButton :disabled="!mPercent" :loading="loadingCars" @click="reloadPage"
+                          :label="loadingCars ? 'Loading' : 'Reload'" color="primary" icon="i-heroicons-arrow-path" />
                         <!-- <UButton :disabled="true" label=" % " color="primary" /> -->
                       </UButtonGroup>
                     </div>
@@ -127,8 +159,8 @@
                     <div class="text-center place-self-center mt-2">
                       <UButtonGroup class="mb-4 ">
                         <UInput size="lg" v-model="mileagePlusMinus" type="number" placeholder=""
-                          icon="i-heroicons-lifebuoy" min="0"  class="w-30 justify-center" />
-                          <UButton :disabled="!mileagePlusMinus" @click="startScrapping" label="Restart Scraping"
+                          icon="i-heroicons-lifebuoy" min="0" class="w-30 justify-center" />
+                        <UButton :disabled="!mileagePlusMinus" @click="startScrapping" label="Restart Scraping"
                           color="primary" icon="i-heroicons-arrow-path" />
                         <!-- <UButton :disabled="true" label=" % " color="primary" /> -->
                       </UButtonGroup>
@@ -208,6 +240,9 @@ import { UInput } from '#components';
 
 const
   {
+    devMode,
+    ignoreOld,
+    sitesToScrap,
     mileagePlusMinus,
     mPercent,
     cutOffPrice,
