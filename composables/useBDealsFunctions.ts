@@ -42,6 +42,59 @@ export function useBDealsFunctions() {
         // window.location.reload()
         // navigateTo(route.fullPath, { replace: true })
     }
+    const exportCSV = () => {
+        const rows: string[] = [];
+        const headersSet = new Set<string>();
+
+        const bestMatches = cars.value.map((car: any) => {
+            let match = car.comparisons?.find(
+                (comparison: any) => comparison.matching_percentage >= mPercent.value
+            );
+            if (match) {
+                headersSet.add("Original Car")
+                Object.keys(match).forEach((key: string) => {
+                    headersSet.add(key)
+                });
+                match["Original Car"]  = car.car_url
+            }
+            return match || null;
+        }).filter(Boolean);
+
+        if (bestMatches.length === 0) {
+            console.warn("Aucune voiture ne correspond au pourcentage minimum.");
+            return;
+        }  
+
+        const headers = Array.from(headersSet);
+        rows.push(headers.join(","));
+
+        for (const match of bestMatches) {
+            const row = headers.map((key: string) => {
+                const value = match?.[key];
+                if (typeof value === "string") {
+                    return `"${value.replace(/"/g, '""')}"`;
+                }
+                return value ?? "";
+            });
+            rows.push(row.join(","));
+        }
+
+        const csvContent = rows.join("\n");
+        const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
+
+        const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
+        const filename = `bestMC_${timestamp}.csv`;
+
+        const link = document.createElement("a");
+        const url = URL.createObjectURL(blob);
+        link.setAttribute("href", url);
+        link.setAttribute("download", filename);
+        document.body.appendChild(link);
+        link.click();
+        document.body.removeChild(link);
+        URL.revokeObjectURL(url);
+    };
+
     const handleLogout = async () => {
         // Supprimer les informations de session
         sessionStorage.removeItem('AccessToken');
@@ -138,13 +191,14 @@ export function useBDealsFunctions() {
 
 
     return {
+        exportCSV,
         mPercent,
         openModal,
-  isModalOpen,
-  selectedCar,
-  resLaCentrale,
-  resAutoScout,
-  relatedCars,
+        isModalOpen,
+        selectedCar,
+        resLaCentrale,
+        resAutoScout,
+        relatedCars,
         domain,
         cutOffPrice,
         reloadPage,

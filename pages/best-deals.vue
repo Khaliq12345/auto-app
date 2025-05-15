@@ -55,7 +55,8 @@
             </div>
             <template #content>
               <div class="text-center">
-                <div class="grid  grid-cols-2 gap-4 py-5 text-center ">
+                <div class="grid  grid-cols-3 gap-4 py-5 text-center ">
+                  <!--  -->
                   <div class="">
                     <span class=" text-xs font-bold">Cut Off Price</span>
                     <div class="text-center place-self-center mt-2">
@@ -80,6 +81,15 @@
                       </UButtonGroup>
                     </div>
                   </div>
+                  <!--  -->
+                  <div class="">
+                    <span class=" text-xs font-bold">Export Best Deals</span>
+                    <div class="text-center place-self-center mt-2">
+                      <UButton :disabled="false" :loading="loadingCars" @click="exportCSV" :label="false? 'Exporting' : 'Export CSV'"
+                          color="primary" icon="i-heroicons-arrow-path" />
+                    </div>
+                  </div>
+                  <!--  -->
                 </div>
 
 
@@ -149,6 +159,7 @@ import CarResultsModal from '../components/deals/CarResultsModal.vue';
 import { useBDealsFunctions } from '~/composables/useBDealsFunctions';
 import { UInput } from '#components';
 const {
+exportCSV,
   mPercent,
   openModal,
   isModalOpen,
