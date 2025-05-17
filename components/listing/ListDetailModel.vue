@@ -47,11 +47,16 @@
                   <UIcon size="15" name="i-heroicons-link" class="text-rose-500" /> Link
                 </a>
               </div>
+
+             
   
               <template #footer>
                 <div class="place-items-center">
                   <p class="mb-4">Matching ({{ voiture.matching_percentage }}%) :</p>
                   <ProgressBar :level="voiture.matching_percentage" />
+                   <div class="text-center mt-4">
+                <p>Reason : {{ voiture.matching_percentage_reason }}</p>
+              </div>
                 </div>
               </template>
             </UCard>
