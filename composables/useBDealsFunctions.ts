@@ -23,7 +23,7 @@ export function useBDealsFunctions() {
     const itemsPerPage = 10;
     const cars = ref<any[]>([])
     const route = useRoute()
-    const domain = computed(() => route.query.domain)
+    const domain = ref();//computed(() => route.query.domain)
     // 
     // watchEffect(() => {
     //     if (domain.value) {
@@ -32,6 +32,7 @@ export function useBDealsFunctions() {
     //     }
     // })
     onMounted(() => {
+        domain.value = route.query.domain
         console.log("Domain reçu :", domain.value)
         getAllCars(domain.value);
     });
@@ -44,18 +45,23 @@ export function useBDealsFunctions() {
     }
     const exportCSV = () => {
         const rows: string[] = [];
-        const headersSet = new Set<string>();
+        // const headersSet = new Set<string>();
 
         const bestMatches = cars.value.map((car: any) => {
             let match = car.comparisons?.find(
                 (comparison: any) => comparison.matching_percentage >= mPercent.value
             );
             if (match) {
-                headersSet.add("Original Car")
-                Object.keys(match).forEach((key: string) => {
-                    headersSet.add(key)
+                // headersSet.add("Original Car")
+                match['matching_percent_from_filter'] = mPercent.value;
+                Object.keys(car).forEach((key: string) => {
+                    // headersSet.add(key)
+                    if (key != 'comparisons') {
+                        match[`original_${key}`] = car[key]
+
+                    }
                 });
-                match["Original Car"]  = car.car_url
+                // match["original_car"] = car
             }
             return match || null;
         }).filter(Boolean);
@@ -63,19 +69,46 @@ export function useBDealsFunctions() {
         if (bestMatches.length === 0) {
             console.warn("Aucune voiture ne correspond au pourcentage minimum.");
             return;
-        }  
+        }
 
-        const headers = Array.from(headersSet);
+        const headers = [
+            'original_id',
+            'original_car_url',
+            'original_make',
+            'original_model',
+            'original_mileage',
+            'original_mfuel_type',
+            'original_color',
+            'original_price_with_tax',
+            'original_price_with_no_tax',
+            'original_lowest_price',
+            'original_average_price',
+            'original_average_price_based_on_best_match',
+            'matching_percent_from_filter',
+            'matching_percentage',
+            'matching_percentage_reason',
+            'domain',
+            'id',
+            'link',
+            'name',
+            'price',
+            'deal_type',
+            'fuel_type',
+            'mileage'
+        ];
         rows.push(headers.join(","));
 
+        console.log('best matches : ', bestMatches);
+
         for (const match of bestMatches) {
-            const row = headers.map((key: string) => {
-                const value = match?.[key];
-                if (typeof value === "string") {
-                    return `"${value.replace(/"/g, '""')}"`;
-                }
-                return value ?? "";
-            });
+            const row =
+                headers.map((key: string) => {
+                    const value = match?.[key];
+                    if (typeof value === "string") {
+                        return `"${value.replace(/"/g, '""')}"`;
+                    }
+                    return value ?? "";
+                });
             rows.push(row.join(","));
         }
 
@@ -145,6 +178,7 @@ export function useBDealsFunctions() {
     const availableColors = computed(() => cars.value ? [...new Set(cars.value.map(car => car.color))].filter(Boolean).map(color => ({ label: color, value: color })) : []);
     const availableModels = computed(() => cars.value ? [...new Set(cars.value.map(car => car.make))].filter(Boolean).map(model => ({ label: model, value: model })) : []);
     const availableDeals = computed(() => cars.value ? [...new Set(cars.value.map(car => car.card_color))].filter(Boolean).map(card_color => ({ label: card_color == 'red' ? 'Worst Deals' : card_color == 'green' ? 'Best Deals' : 'Not Bads', value: card_color })) : []);
+    const order: any = { 'green': 0, 'yellow': 1, 'red': 2 }
     var filteredCars = computed(() => {
         return cars.value.filter(car => {
             const searchMatch = searchTerm.value ?
@@ -160,6 +194,8 @@ export function useBDealsFunctions() {
             currentPage.value = 1
 
             return searchMatch && colorMatch && modelMatch && dealMatch;
+        }).sort((a, b) => {
+            return (order[a.card_color] ?? 99) - (order[b.card_color] ?? 99);
         });
     });
     const pageCount = computed(() => Math.ceil(filteredCars.value.length / itemsPerPage));
@@ -182,9 +218,10 @@ export function useBDealsFunctions() {
     const to = (page: any) => {
         return {
             query: {
-                page
+                page,
+            domain: domain.value
             },
-            hash: '#with-links'
+            // hash: '#with-links'
         }
     }
     // 

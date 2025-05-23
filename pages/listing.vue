@@ -17,7 +17,7 @@
                 Log Out
               </UButton>
             </div>
-            <div class="w-full place-items-center">
+            <div class="w-full place-items-center flex justify-center">
               <UNavigationMenu :items="menuItems" orientation="vertical" class="" />
             </div>
           </template>

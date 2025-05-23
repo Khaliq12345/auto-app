@@ -214,6 +214,7 @@ export function useListingFunctions() {
     const availableColors = computed(() => cars.value ? [...new Set(cars.value.map(car => car.color))].filter(Boolean).map(color => ({ label: color, value: color })) : []);
     const availableModels = computed(() => cars.value ? [...new Set(cars.value.map(car => car.make))].filter(Boolean).map(model => ({ label: model, value: model })) : []);
     const availableDeals = computed(() => cars.value ? [...new Set(cars.value.map(car => car.card_color))].filter(Boolean).map(card_color => ({ label: card_color == 'red' ? 'Worst Deals' : card_color == 'green' ? 'Best Deals' : 'Not Bads', value: card_color })) : []);
+    const order: any = { 'green': 0, 'yellow': 1, 'red': 2 }
     const filteredCars = computed(() => {
         return cars.value.filter(car => {
             const searchMatch = searchTerm.value ?
@@ -229,6 +230,8 @@ export function useListingFunctions() {
             currentPage.value = 1
 
             return searchMatch && colorMatch && modelMatch && dealMatch;
+        }).sort((a, b) => {
+            return (order[a.card_color] ?? 99) - (order[b.card_color] ?? 99);
         });
     });
     const pageCount = computed(() => Math.ceil(filteredCars.value.length / itemsPerPage));
@@ -248,7 +251,7 @@ export function useListingFunctions() {
         isModalOpen.value = true;
     };
     const to = (page: any) => {
-        console.log(" holla", page);
+        // console.log(" holla", page);
         return {
             query: {
                 page

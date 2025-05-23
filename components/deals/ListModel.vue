@@ -1,6 +1,6 @@
 <template>
   <UCard :ui="{ rounded: 'lg', shadow: 'md' }" :class="`text-black shadow-lg hover:shadow-xl transition-shadow duration-300 `"
-  :style="`background-color: ${car.card_color== 'red' ? '#f87171' : car.card_color== 'green' ? '#86efac' : 'fde047'}`">
+  :style="`background-color: ${car.card_color== 'red' ? '#f87171' : car.card_color== 'green' ? '#86efac' : '#fde047'}`">
     <template #header>
       <div class="flex items-center justify-between">
         <div class="flex items-center space-x-4">
@@ -37,11 +37,23 @@
         </p>
         <p class="text-sm  mt-2 ">
           <UIcon size="20" name="i-heroicons-currency-dollar" class="mx-auto align-sub text-warning-800" />
-          Original Without Tax : <span :class="!bestMatchingCar ? '' : bestMatchingCar && car.price_with_no_tax <= bestMatchingCar.price ? 'text-green-600' : 'text-red-200' "> {{ car.price_with_no_tax.toFixed(2) }} </span>  
+          Original Without Tax : <span :class="!bestMatchingCar ? '' : bestMatchingCar && car.price_with_no_tax <= bestMatchingCar.price ? 'text-green-600' : 'text-red-600' "> {{ car.price_with_no_tax.toFixed(2) }} </span>  
         </p>
         <p class="text-sm  mt-2 ">
           <UIcon size="20" name="i-heroicons-currency-dollar" class="mx-auto align-sub text-warning-800" />
-          Original With Tax : <span :class="!bestMatchingCar ? '' : bestMatchingCar && car.price_with_tax <= bestMatchingCar.price ? 'text-green-600' : 'text-red-200' "> {{ car.price_with_tax.toFixed(2) }} </span>  
+          Original With Tax : <span :class="!bestMatchingCar ? '' : bestMatchingCar && car.price_with_tax <= bestMatchingCar.price ? 'text-green-600' : 'text-red-600' "> {{ car.price_with_tax.toFixed(2) }} </span>  
+        </p>
+        <p class="text-sm  mt-2">
+          <UIcon size="20" name="i-heroicons-currency-dollar" class="mx-auto align-sub text-warning-800" />
+          Average Price : {{ car.average_price.toFixed(2) }}
+        </p>
+        <p class="text-sm  ">
+          <UIcon size="20" name="i-heroicons-currency-dollar" class="mx-auto align-sub text-warning-800" />
+          Average Price (Best Match Based) : {{ car.average_price_based_on_best_match.toFixed(2) }}
+        </p>
+        <p class="text-sm  mt-2 mb-2">
+          <UIcon size="20" name="i-heroicons-currency-dollar" class="mx-auto align-sub text-warning-800" />
+          Lowest Price : {{ car.lowest_price.toFixed(2) }} 
         </p>
         
        

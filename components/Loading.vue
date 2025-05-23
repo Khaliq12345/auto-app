@@ -1,5 +1,5 @@
 <template>
-    <div>
+    <div class="flex text-center justify-center">
         <!-- 2 -->
         <div class="loader-circle-11">
             <div class="arc "></div>
