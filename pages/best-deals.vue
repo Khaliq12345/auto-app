@@ -41,11 +41,22 @@
       <UContainer class="mt-4">
         <UCard :title="title" :ui="{ rounded: 'lg', shadow: 'md' }">
           <!-- Search -->
-          <div class="text-center place-self-center">
-            <UFormField class="text-center">
-              <UInput size="lg" v-model="searchTerm" placeholder="Search by Name or Model..."
-                icon="i-heroicons-magnifying-glass" class="w-100 justify-center" />
-            </UFormField>
+          <div class="flex justify-around gap-y-3 flex-wrap">
+            <!-- Search -->
+            <div class="text-center place-self-center">
+              <UFormField class="text-center">
+                <UInput size="lg" v-model="searchTerm" placeholder="Search by Name or Model..."
+                  icon="i-heroicons-magnifying-glass" class="w-100 justify-center" />
+              </UFormField>
+            </div>
+            <!-- Order -->
+            <div class="">
+              <div class="text-center place-self-center mt-2 mb-4 ">
+                <span class=" text-xs font-bold mr-2">Display Order : </span>
+                <USelect v-model="colorOrder" :items="orderOptions" class="w-50 h-10" placeholder="Sorting Order">
+                </USelect>
+              </div>
+            </div>
           </div>
           <!-- Filters -->
           <UCollapsible :unmount-on-hide="false" class="flex flex-col gap-2  my-4  place-self-center">
@@ -55,7 +66,7 @@
             </div>
             <template #content>
               <div class="text-center">
-                <div class="grid  grid-cols-3 gap-4 py-5 text-center ">
+                <div class="flex justify-around gap-x-15 py-5 text-center flex-wrap">
                   <!--  -->
                   <div class="">
                     <span class=" text-xs font-bold">Cut Off Price</span>
@@ -94,8 +105,7 @@
 
 
 
-
-                <div class="grid  grid-cols-3 gap-4 py-5 text-center ">
+<div class="flex justify-around gap-x-15 gap-y-4 py-5 text-center flex-wrap">
                   <UFormField>
                     <USelect v-model="selectedColors" icon="i-heroicons-paint-brush" :items="availableColors" multiple
                       clearable :placeholder="availableColors.length ? 'By color' : 'No Available Color'">
@@ -159,6 +169,8 @@ import CarResultsModal from '../components/deals/CarResultsModal.vue';
 import { useBDealsFunctions } from '~/composables/useBDealsFunctions';
 import { UInput } from '#components';
 const {
+  colorOrder,
+        orderOptions,
 exportCSV,
   mPercent,
   openModal,

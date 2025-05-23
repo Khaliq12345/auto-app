@@ -69,39 +69,39 @@
               }" />
               <div class="grid  grid-cols-3 gap-4 py-2 text-center ">
                 <!-- Dev or Not -->
-                 <div class="">
-                    <span class=" text-xs font-bold">Dev Mode</span>
-                    <div class="text-center place-self-center mt-2">
-                      <UFormField>
-                        <USelect v-model="devMode" :items="['true', 'false']" class="w-50" />
-                      </UFormField>
-                    </div>
+                <div class="">
+                  <span class=" text-xs font-bold">Dev Mode</span>
+                  <div class="text-center place-self-center mt-2">
+                    <UFormField>
+                      <USelect v-model="devMode" :items="['true', 'false']" class="w-50" />
+                    </UFormField>
                   </div>
-                
+                </div>
+
                 <!-- Ignore Old -->
-                 <div class="">
-                    <span class=" text-xs font-bold">Ignore Old</span>
-                    <div class="text-center place-self-center mt-2">
-                      <USelect v-model="ignoreOld"  :items="['true', 'false']" class="w-50" />
-                    </div>
+                <div class="">
+                  <span class=" text-xs font-bold">Ignore Old</span>
+                  <div class="text-center place-self-center mt-2">
+                    <USelect v-model="ignoreOld" :items="['true', 'false']" class="w-50" />
                   </div>
-                
+                </div>
+
                 <!-- Sites To Scrap -->
-                 <div class="">
-                    <span class=" text-xs font-bold">Sites to Scrap</span>
-                    <div class="text-center place-self-center mt-2">
-                      <UFormField>
-                  <USelect v-model="sitesToScrap" multiple :items="['autoscout24', 'lacentrale']" class="w-50" />
-                </UFormField>
-                    </div>
+                <div class="">
+                  <span class=" text-xs font-bold">Sites to Scrap</span>
+                  <div class="text-center place-self-center mt-2">
+                    <UFormField>
+                      <USelect v-model="sitesToScrap" multiple :items="['autoscout24', 'lacentrale']" class="w-50" />
+                    </UFormField>
                   </div>
-                
+                </div>
+
               </div>
               <!-- <div v-if="importSuccess" class="justify-end flex"> -->
               <!-- Start Scraping -->
               <div class="justify-end flex mt-3">
-                <UButton  label="Start Scrapping" icon="i-heroicons-chevron-double-right"
-                  class="justify-center" @click="startScrapping" color="info" />
+                <UButton label="Start Scrapping" icon="i-heroicons-chevron-double-right" class="justify-center"
+                  @click="startScrapping" color="info" />
                 <!-- <UButton v-if="scrapStarted" label="Check Status" icon="i-heroicons-eye" class=" justify-center"
                   @click="seeStatus" color="warning" /> -->
               </div>
@@ -113,12 +113,24 @@
       <UContainer class="mt-4 ">
         <UCard :title="title" :ui="{ rounded: 'lg', shadow: 'md' }" class="">
           <!-- Search -->
-          <div class="text-center place-self-center">
-            <UFormField class="text-center">
-              <UInput size="lg" v-model="searchTerm" placeholder="Search by Name or Model..."
-                icon="i-heroicons-magnifying-glass" class="w-100 justify-center" />
-            </UFormField>
+          <div class="flex justify-around gap-y-3 flex-wrap">
+            <!-- Search -->
+            <div class="text-center place-self-center">
+              <UFormField class="text-center">
+                <UInput size="lg" v-model="searchTerm" placeholder="Search by Name or Model..."
+                  icon="i-heroicons-magnifying-glass" class="w-100 justify-center" />
+              </UFormField>
+            </div>
+            <!-- Order -->
+            <div class="">
+              <div class="text-center place-self-center mt-2 mb-4 ">
+                <span class=" text-xs font-bold mr-2">Display Order : </span>
+                <USelect v-model="colorOrder" :items="orderOptions" class="w-50 h-10" placeholder="Sorting Order">
+                </USelect>
+              </div>
+            </div>
           </div>
+
           <!-- Filters -->
           <UCollapsible :unmount-on-hide="false" class="flex flex-col gap-2  my-4  place-self-center">
             <div class="text-center cursor-pointer">
@@ -127,7 +139,7 @@
             </div>
             <template #content>
               <div class="text-center">
-                <div class="grid  grid-cols-3 gap-4 py-5 text-center ">
+                <div class="flex justify-around gap-x-15 py-5 text-center flex-wrap">
                   <!-- Cut Off Price -->
                   <div class="">
                     <span class=" text-xs font-bold">Cut Off Price</span>
@@ -169,7 +181,7 @@
                 </div>
 
 
-                <div class="grid  grid-cols-3 gap-4 py-5 text-center ">
+                <div class="flex justify-around gap-x-15 gap-y-4 py-5 text-center flex-wrap">
                   <UFormField>
                     <USelect v-model="selectedColors" icon="i-heroicons-paint-brush" :items="availableColors" multiple
                       clearable :placeholder="availableColors.length ? 'By color' : 'No Available Color'">
@@ -240,6 +252,8 @@ import { UInput } from '#components';
 
 const
   {
+    colorOrder,
+    orderOptions,
     devMode,
     ignoreOld,
     sitesToScrap,

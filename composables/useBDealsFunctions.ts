@@ -73,28 +73,28 @@ export function useBDealsFunctions() {
 
         const headers = [
             'original_id',
-            'original_car_url',
+            // 'original_car_url',
             'original_make',
             'original_model',
-            'original_mileage',
-            'original_mfuel_type',
-            'original_color',
+            // 'original_mileage',
+            // 'original_mfuel_type',
+            // 'original_color',
             'original_price_with_tax',
-            'original_price_with_no_tax',
+            // 'original_price_with_no_tax',
             'original_lowest_price',
             'original_average_price',
-            'original_average_price_based_on_best_match',
+            // 'original_average_price_based_on_best_match',
             'matching_percent_from_filter',
             'matching_percentage',
-            'matching_percentage_reason',
-            'domain',
+            // 'matching_percentage_reason',
+            // 'domain',
             'id',
-            'link',
-            'name',
-            'price',
-            'deal_type',
-            'fuel_type',
-            'mileage'
+            // 'link',
+            // 'name',
+            // 'price',
+            // 'deal_type',
+            // 'fuel_type',
+            // 'mileage'
         ];
         rows.push(headers.join(","));
 
@@ -178,7 +178,16 @@ export function useBDealsFunctions() {
     const availableColors = computed(() => cars.value ? [...new Set(cars.value.map(car => car.color))].filter(Boolean).map(color => ({ label: color, value: color })) : []);
     const availableModels = computed(() => cars.value ? [...new Set(cars.value.map(car => car.make))].filter(Boolean).map(model => ({ label: model, value: model })) : []);
     const availableDeals = computed(() => cars.value ? [...new Set(cars.value.map(car => car.card_color))].filter(Boolean).map(card_color => ({ label: card_color == 'red' ? 'Worst Deals' : card_color == 'green' ? 'Best Deals' : 'Not Bads', value: card_color })) : []);
-    const order: any = { 'green': 0, 'yellow': 1, 'red': 2 }
+    const colorOrder = ref('green--yellow--red')
+    const orderOptions = ['green--yellow--red', 'green--red--yellow', 'yellow--green--red', 'yellow--red--green', 'red--yellow--green', 'red--green--yellow']
+    const getOrderMap = (): Record<string, number> => {
+        const split = colorOrder.value.split('--')
+        const map: Record<string, number> = {}
+        split.forEach((color, index) => {
+            map[color] = index
+        })
+        return map
+    }
     var filteredCars = computed(() => {
         return cars.value.filter(car => {
             const searchMatch = searchTerm.value ?
@@ -195,7 +204,8 @@ export function useBDealsFunctions() {
 
             return searchMatch && colorMatch && modelMatch && dealMatch;
         }).sort((a, b) => {
-            return (order[a.card_color] ?? 99) - (order[b.card_color] ?? 99);
+            const orderMap = getOrderMap()
+            return (orderMap[a.card_color] ?? 99) - (orderMap[b.card_color] ?? 99);
         });
     });
     const pageCount = computed(() => Math.ceil(filteredCars.value.length / itemsPerPage));
@@ -228,6 +238,8 @@ export function useBDealsFunctions() {
 
 
     return {
+        colorOrder,
+        orderOptions,
         exportCSV,
         mPercent,
         openModal,
