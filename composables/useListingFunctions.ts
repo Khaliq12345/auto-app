@@ -214,19 +214,8 @@ export function useListingFunctions() {
     const availableColors = computed(() => cars.value ? [...new Set(cars.value.map(car => car.color))].filter(Boolean).map(color => ({ label: color, value: color })) : []);
     const availableModels = computed(() => cars.value ? [...new Set(cars.value.map(car => car.make))].filter(Boolean).map(model => ({ label: model, value: model })) : []);
     const availableDeals = computed(() => cars.value ? [...new Set(cars.value.map(car => car.card_color))].filter(Boolean).map(card_color => ({ label: card_color == 'red' ? 'Worst Deals' : card_color == 'green' ? 'Best Deals' : 'Not Bads', value: card_color })) : []);
-    const colorOrder = ref('green--yellow--red')
-    const orderOptions = ['green--yellow--red', 'green--red--yellow', 'yellow--green--red', 'yellow--red--green', 'red--yellow--green', 'red--green--yellow']
-    const getOrderMap = (): Record<string, number> => {
-        const split = colorOrder.value.split('--')
-        const map: Record<string, number> = {}
-        split.forEach((color, index) => {
-            map[color] = index
-        })
-        return map
-    }
+    const sortOrder = ref("asc")
     const filteredCars = computed(() => {
-        //         const orderMap = getOrderMap()
-        //   cars.value.sort((a, b) => (orderMap[a.col] ?? 99) - (orderMap[b.col] ?? 99))
         return cars.value.filter(car => {
             const searchMatch = searchTerm.value ?
                 (car?.make as string)?.toLowerCase()?.includes(searchTerm.value.toLowerCase()) ||
@@ -242,8 +231,7 @@ export function useListingFunctions() {
 
             return searchMatch && colorMatch && modelMatch && dealMatch;
         }).sort((a, b) => {
-            const orderMap = getOrderMap()
-            return (orderMap[a.card_color] ?? 99) - (orderMap[b.card_color] ?? 99);
+            return sortOrder.value != 'asc' ? (a.price_difference_with_avg_price ?? 99) - (b.price_difference_with_avg_price ?? 99) : (b.price_difference_with_avg_price ?? 99) - (a.price_difference_with_avg_price ?? 99);
         });
     });
     const pageCount = computed(() => Math.ceil(filteredCars.value.length / itemsPerPage));
@@ -328,8 +316,7 @@ export function useListingFunctions() {
     });
 
     return {
-        colorOrder,
-        orderOptions,
+        sortOrder,
         devMode,
         ignoreOld,
         sitesToScrap,

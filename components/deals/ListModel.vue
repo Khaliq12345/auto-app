@@ -39,9 +39,13 @@
           <UIcon size="20" name="i-heroicons-currency-dollar" class="mx-auto align-sub text-warning-800" />
           Original Without Tax : <span :class="!bestMatchingCar ? '' : bestMatchingCar && car.price_with_no_tax <= bestMatchingCar.price ? 'text-green-600' : 'text-red-600' "> {{ car.price_with_no_tax.toFixed(2) }} </span>  
         </p>
-        <p class="text-sm  mt-2 ">
+        <p class="text-sm  ">
           <UIcon size="20" name="i-heroicons-currency-dollar" class="mx-auto align-sub text-warning-800" />
           Original With Tax : <span :class="!bestMatchingCar ? '' : bestMatchingCar && car.price_with_tax <= bestMatchingCar.price ? 'text-green-600' : 'text-red-600' "> {{ car.price_with_tax.toFixed(2) }} </span>  
+        </p>
+        <p class="text-sm ">
+          <UIcon size="20" name="i-heroicons-currency-dollar" class="mx-auto align-sub text-warning-800" />
+          Price - Avg  : {{ car.price_difference_with_avg_price.toFixed(2) }}
         </p>
         <p class="text-sm  mt-2">
           <UIcon size="20" name="i-heroicons-currency-dollar" class="mx-auto align-sub text-warning-800" />

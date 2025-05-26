@@ -124,8 +124,8 @@
             <!-- Order -->
             <div class="">
               <div class="text-center place-self-center mt-2 mb-4 ">
-                <span class=" text-xs font-bold mr-2">Display Order : </span>
-                <USelect v-model="colorOrder" :items="orderOptions" class="w-50 h-10" placeholder="Sorting Order">
+                <span class=" text-xs font-bold mr-2">Sort Order : </span>
+                <USelect v-model="sortOrder" :items="['asc', 'desc']" class="w-50 h-10" placeholder="Sorting Order">
                 </USelect>
               </div>
             </div>
@@ -252,8 +252,7 @@ import { UInput } from '#components';
 
 const
   {
-    colorOrder,
-    orderOptions,
+    sortOrder,
     devMode,
     ignoreOld,
     sitesToScrap,

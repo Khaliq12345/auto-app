@@ -42,6 +42,10 @@
           <UIcon size="20" name="i-heroicons-currency-dollar" class="mx-auto align-sub text-primary-800" />
           Price With Tax : {{ car.price_with_tax.toFixed(2) }}
         </p>
+        <p class="text-sm ">
+          <UIcon size="20" name="i-heroicons-currency-dollar" class="mx-auto align-sub text-primary-800" />
+          Price - Avg  : {{ car.price_difference_with_avg_price.toFixed(2) }}
+        </p>
         <p class="text-sm  mt-2">
           <UIcon size="20" name="i-heroicons-currency-dollar" class="mx-auto align-sub text-primary-800" />
           Average Price : {{ car.average_price.toFixed(2) }}
