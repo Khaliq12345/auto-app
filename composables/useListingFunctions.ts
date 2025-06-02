@@ -7,7 +7,7 @@ export function useListingFunctions() {
     const router = useRouter();
     const devMode = ref('true');
     const ignoreOld = ref('true');
-    const sitesToScrap = ref(['autoscout24', 'lacentrale']);
+    const sitesToScrap = ref(['autoscout24', 'lacentrale', 'leboncoin']);
     const loadingCars = ref(false);
     const globalLoading = ref(false);
     const isStatusModalOpen = ref(false);
@@ -26,6 +26,7 @@ export function useListingFunctions() {
     const relatedCars = ref<any[]>([]);
     const resLaCentrale = ref();
     const resAutoScout = ref();
+    const resLebonCoin = ref();
     const searchTerm = ref('');
     const cutOffPrice = ref(500);
     const mPercent = ref(95);
@@ -248,6 +249,7 @@ export function useListingFunctions() {
         relatedCars.value = result;
         resLaCentrale.value = computed(() => { return relatedCars.value.filter(vtr => vtr.domain === 'https://www.lacentrale.fr/').length ?? 0 });
         resAutoScout.value = computed(() => { return relatedCars.value.filter(vtr => vtr.domain === 'https://www.autoscout24.fr/').length ?? 0 });
+        resLebonCoin.value = computed(() => { return relatedCars.value.filter(vtr => vtr.domain === 'https://www.leboncoin.fr/').length ?? 0 });
         isModalOpen.value = true;
     };
     const to = (page: any) => {
@@ -338,6 +340,7 @@ export function useListingFunctions() {
         relatedCars,
         resLaCentrale,
         resAutoScout,
+        resLebonCoin,
         searchTerm,
         selectedColors,
         selectedModels,

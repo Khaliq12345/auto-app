@@ -10,7 +10,7 @@
               <div>
                 <h1 class="text-3xl font-bold ">Find Best Deals !</h1>
                 <p class="text-gray-500 mt-1">From <ULink :to="domain" target="_blank" class="text-blue-500 font-bold">
-                    {{ domain == 'https://www.autoscout24.fr/' ? 'AutoScout24' : 'La Centrale' }}</ULink>
+                    {{ domain }}</ULink>
                 </p>
               </div>
               <div class="text-end">
@@ -148,7 +148,7 @@
           <!-- Others -->
           <!-- Modal For Details -->
           <CarResultsModal v-model="isModalOpen" :selectedCar="selectedCar" :resLaCentrale="resLaCentrale"
-            :resAutoScout="resAutoScout" :relatedCars="relatedCars" />
+            :resAutoScout="resAutoScout" :relatedCars="relatedCars" :resLebonCoin="resLebonCoin" />
           <!-- Pagination -->
           <div class="justify-center">
             <UPagination v-model:page="currentPage" :total="filteredCars.length" :to="to" :sibling-count="1" show-edges
@@ -177,6 +177,7 @@ exportCSV,
   selectedCar,
   resLaCentrale,
   resAutoScout,
+  resLebonCoin,
   relatedCars,
   domain,
   cutOffPrice,

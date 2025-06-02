@@ -91,7 +91,7 @@
                   <span class=" text-xs font-bold">Sites to Scrap</span>
                   <div class="text-center place-self-center mt-2">
                     <UFormField>
-                      <USelect v-model="sitesToScrap" multiple :items="['autoscout24', 'lacentrale']" class="w-50" />
+                      <USelect v-model="sitesToScrap" multiple :items="['autoscout24', 'lacentrale', 'leboncoin']" class="w-50" />
                     </UFormField>
                   </div>
                 </div>
@@ -225,7 +225,7 @@
           <!-- Others -->
           <!-- Modal For Details -->
           <CarResultsModal v-model="isModalOpen" :selectedCar="selectedCar" :resLaCentrale="resLaCentrale"
-            :resAutoScout="resAutoScout" :relatedCars="relatedCars" />
+            :resAutoScout="resAutoScout" :relatedCars="relatedCars" :resLebonCoin="resLebonCoin" />
           <!-- Modal For Status -->
           <!-- <ScrapStatusModal v-model="isStatusModalOpen" :totalToProcess="totalToProcess"
             :alreadyProcessed="alreadyProcessed" :scrapStatus="scrapStatus" /> -->
@@ -274,6 +274,7 @@ const
     relatedCars,
     resLaCentrale,
     resAutoScout,
+    resLebonCoin,
     searchTerm,
     selectedColors,
     selectedModels,
@@ -324,6 +325,12 @@ const menuItems = ref([
         label: 'La Centrale  ',
         icon: 'i-heroicons-rectangle-group',
         to: '/best-deals?domain=https://www.lacentrale.fr/',
+        // target: '_blank'
+      },
+      {
+        label: 'Le Boncoin  ',
+        icon: 'i-heroicons-rectangle-group',
+        to: '/best-deals?domain=https://www.leboncoin.fr/',
         // target: '_blank'
       }
     ]

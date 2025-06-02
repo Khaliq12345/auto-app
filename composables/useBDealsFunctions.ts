@@ -19,6 +19,7 @@ export function useBDealsFunctions() {
     const relatedCars = ref<any[]>([]);
     const resLaCentrale = ref();
     const resAutoScout = ref();
+    const resLebonCoin = ref();
     const currentPage = ref(1);
     const itemsPerPage = 10;
     const cars = ref<any[]>([])
@@ -212,6 +213,7 @@ export function useBDealsFunctions() {
         relatedCars.value = result;
         resLaCentrale.value = computed(() => { return relatedCars.value.filter(vtr => vtr.domain === 'https://www.lacentrale.fr/').length ?? 0 });
         resAutoScout.value = computed(() => { return relatedCars.value.filter(vtr => vtr.domain === 'https://www.autoscout24.fr/').length ?? 0 });
+        resLebonCoin.value = computed(() => { return relatedCars.value.filter(vtr => vtr.domain === 'https://www.leboncoin.fr/').length ?? 0 });
         isModalOpen.value = true;
     };
 
@@ -236,6 +238,7 @@ export function useBDealsFunctions() {
         selectedCar,
         resLaCentrale,
         resAutoScout,
+        resLebonCoin,
         relatedCars,
         domain,
         cutOffPrice,

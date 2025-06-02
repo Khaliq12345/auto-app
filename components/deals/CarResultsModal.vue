@@ -31,6 +31,9 @@
                   <!-- AutoScout24 -->
                   <SourceCollapsible v-if="resAutoScout.value!=0" title="AutoScout24" color="blue" :results="resAutoScout"
                     :relatedCars="relatedCars" domain='https://www.autoscout24.fr/' />
+                    <!-- Le Boncoin -->
+                  <SourceCollapsible v-if="resLebonCoin.value!=0" title="Le Boncoin" color="warning" :results="resLebonCoin"
+                    :relatedCars="relatedCars" domain='https://www.leboncoin.fr/' />
                   
                     </div>
               </div>
@@ -51,6 +54,7 @@ import SourceCollapsible from '../components/listing/SourceCollapsible.vue';
     selectedCar: Object,
     resLaCentrale: Object,
     resAutoScout: Object,
+    resLebonCoin: Object,
     relatedCars: Array,
   })
   
