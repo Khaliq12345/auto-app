@@ -22,7 +22,7 @@ export function useNotifications() {
 // Image
 import { parseURL } from 'ufo';
 export const isImageUrlSimple = (url: string): boolean => {
-  if (!url) {
+  if (!url || url == null) {
     return false;
   }
   const lowercasedUrl = url.toLowerCase();

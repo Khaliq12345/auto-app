@@ -37,6 +37,10 @@
                       <UIcon size="20" name="i-heroicons-wrench-screwdriver" class="text-rose-500 mx-auto align-sub " />
                       {{ voiture.fuel_type }} -- {{ voiture.boite_de_vitesse }}
                     </li>
+                    <li>
+                      <UIcon size="20" name="i-heroicons-calendar-days" class="text-rose-500 mx-auto align-sub " />
+                      Updated At : {{ voiture.updated_at }}
+                    </li>
                   </ul>
                 </div>
               </div>
