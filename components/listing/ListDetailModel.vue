@@ -45,8 +45,8 @@
                 </div>
               </div>
   
-              <div class="flex justify-between gap-x-3 mt-2">
-                <p>{{ voiture.car_metadata }}</p>
+              <div class=" mt-2">
+                <p class="my-2 text-justify break-words whitespace-pre-wrap">{{ voiture.car_metadata.replace(/\n/g, ' ') }}</p>
                 <a :href="voiture.link" target="_blank" rel="noopener noreferrer">
                   <UIcon size="15" name="i-heroicons-link" class="text-rose-500" /> Link
                 </a>

@@ -59,6 +59,10 @@
           <UIcon size="20" name="i-heroicons-currency-dollar" class="mx-auto align-sub text-warning-800" />
           Lowest Price : {{ car.lowest_price.toFixed(2) }} 
         </p>
+        <p class="text-sm  mb-2">
+          <UIcon size="20" name="i-heroicons-calendar-days" class="mx-auto align-sub text-warning-800" />
+          Last Update : {{ car.updated_at ?? car.created_at }}
+        </p>
         
        
 
