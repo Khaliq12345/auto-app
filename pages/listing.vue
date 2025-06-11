@@ -213,7 +213,7 @@
           <div v-if="loadingCars" class="place-items-center place-content-center my-15">
             <Loading />
             <div class="container mx-auto p-4 text-center">
-              <p>Loading Data ... </p>
+              <p>Loading Data ... {{ `${cars.length} / ${totalCount}` }} </p>
             </div>
           </div>
           <div v-if="(searchTerm && filteredCars.length == 0)" class="text-center my-15">

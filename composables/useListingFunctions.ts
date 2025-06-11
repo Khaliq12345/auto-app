@@ -102,48 +102,49 @@ export function useListingFunctions() {
 
     }
     const getAllCars = async () => {
+        const stored_route = sessionStorage.getItem('route')
         loadingCars.value = true;
         const accessToken = sessionStorage.getItem('AccessToken');
         const refToken = sessionStorage.getItem('RefreshToken');
         cars.value = []
-        
+        sessionStorage.setItem(`${stored_route}_scraping`, '1');
         try {
-            while ( cars.value.length < totalCount.value) {
-
-                console.log("Loading Cars : ", cars.value.length , " / ", totalCount.value)
-                
-            const response = await axios.get(urlAPI + "/get_all_cars",
-                {
-                    params: {
-                        access_token: accessToken,
-                        refresh_token: refToken,
-                        // page : currentPage.value,
-                        cut_off_price: cutOffPrice.value,
-                        percentage_limit: mPercent.value,
-                        domain: '',
-                        limit: 100
+            while (cars.value.length < totalCount.value) {
+                console.log("Loading Cars : ", cars.value.length, " / ", totalCount.value, stored_route)
+                const response = await axios.get(urlAPI + "/get_all_cars",
+                    {
+                        params: {
+                            access_token: accessToken,
+                            refresh_token: refToken,
+                            // page : currentPage.value,
+                            cut_off_price: cutOffPrice.value,
+                            percentage_limit: mPercent.value,
+                            domain: '',
+                            limit: 100
+                        },
+                        headers: {
+                            "accept": "application/json",
+                            "content-type": "application/x-www-form-urlencoded",
+                        },
+                        // timeout: 60000,
                     },
-                    headers: {
-                        "accept": "application/json",
-                        "content-type": "application/x-www-form-urlencoded",
-                    },
-                },
-            );
-
-            // 
-            // console.log('Got cars for page :', currentPage.value, " got results ", response.data.details.length);
-            // console.log('Get Cars:', response.data);
-            cars.value.push(...response.data.details);
-            // 
-            totalCount.value = response.data.total;
-            // Stocker l'access token dans la session du navigateur
-            sessionStorage.setItem('AccessToken', response.data.session.session.access_token);
-            sessionStorage.setItem('RefreshToken', response.data.session.session.refresh_token);
-            sessionStorage.setItem('ExpiresAt', response.data.session.session.expires_at);
-            
-        }
-        
-
+                );
+                // 
+                // console.log('Got cars for page :', currentPage.value, " got results ", response.data.details.length);
+                // console.log('Get Cars:', response.data);
+                cars.value.push(...response.data.details);
+                // 
+                totalCount.value = response.data.total;
+                // Stocker l'access token dans la session du navigateur
+                sessionStorage.setItem('AccessToken', response.data.session.session.access_token);
+                sessionStorage.setItem('RefreshToken', response.data.session.session.refresh_token);
+                sessionStorage.setItem('ExpiresAt', response.data.session.session.expires_at);
+                // 
+                if (stored_route !== sessionStorage.getItem('route')) {
+                    console.log("Ce route Stop", stored_route)
+                    break
+                }
+            }
         } catch (err) {
             console.error('Erreur de requete:', err);
         } finally {
@@ -372,7 +373,7 @@ export function useListingFunctions() {
         }
     });
 
-    
+
     return {
         totalCount,
         sortOrder,
