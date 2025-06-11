@@ -127,6 +127,13 @@
                 <span class=" text-xs font-bold mr-2">Sort Order : </span>
                 <USelect v-model="sortOrder" :items="['asc', 'desc']" class="w-50 h-10" placeholder="Sorting Order">
                 </USelect>
+                <!-- <UButtonGroup class="mb-4 ">
+                        <USelect v-model="sortOrder" :items="['asc', 'desc']" class="w-50 h-10" placeholder="Sorting Order">
+                </USelect>
+                        <UButton :disabled="!mPercent" :loading="loadingCars" @click="reloadPage"
+                          :label="loadingCars ? 'Loading' : 'Reload'" color="primary" icon="i-heroicons-arrow-path" />
+                      </UButtonGroup> -->
+                
               </div>
             </div>
           </div>

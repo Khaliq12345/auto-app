@@ -204,4 +204,10 @@ definePageMeta({
   middleware: ["auth"]
 })
 
+
+watch(() => currentPage.value, ()=>{
+      getAllCars()
+    } )
+
+
 </script>

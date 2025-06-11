@@ -35,7 +35,7 @@ export function useBDealsFunctions() {
     // })
     onMounted(() => {
         domain.value = route.query.domain
-        console.log("Domain reçu :", domain.value)
+        // console.log("Domain reçu :", domain.value)
         getAllCars(domain.value);
     });
     // Methods
@@ -100,7 +100,7 @@ export function useBDealsFunctions() {
         ];
         rows.push(headers.join(","));
 
-        console.log('best matches : ', bestMatches);
+        // console.log('best matches : ', bestMatches);
 
         for (const match of bestMatches) {
             const row =
@@ -161,7 +161,7 @@ export function useBDealsFunctions() {
             );
 
             // 
-            console.log('Get Cars:', response.data);
+            // console.log('Get Cars:', response.data);
             cars.value = response.data.details;
             totalCount.value = response.data.total;
             // Stocker l'access token dans la session du navigateur
@@ -194,7 +194,7 @@ export function useBDealsFunctions() {
             const modelMatch = selectedModels.value.length ? selectedModels.value.includes(car.make) : true;
             const dealMatch = selectedDeals.value.length ? selectedDeals.value.includes(car.card_color) : true;
 
-            currentPage.value = 1
+            // currentPage.value = 1
 
             return searchMatch && colorMatch && modelMatch && dealMatch;
         }).sort((a, b) => {
@@ -204,7 +204,7 @@ export function useBDealsFunctions() {
     const openModal = async (car: any) => {
         selectedCar.value = car;
         const result = car.comparisons  //await getCarComparisons(car.id)
-        console.log('result ', result);
+        // console.log('result ', result);
         // gat comparaisons
         relatedCars.value = result;
         resLaCentrale.value = computed(() => { return relatedCars.value.filter(vtr => vtr.domain === 'https://www.lacentrale.fr/').length ?? 0 });

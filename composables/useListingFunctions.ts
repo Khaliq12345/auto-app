@@ -83,8 +83,8 @@ export function useListingFunctions() {
             );
 
             // 
-            console.log('Got cars for page :', currentPage.value, " got results ", response.data.details.length);
-            console.log('Get Cars:', response.data);
+            // console.log('Got cars for page :', currentPage.value, " got results ", response.data.details.length);
+            // console.log('Get Cars:', response.data);
             cars.value = response.data.details;
             // 
             totalCount.value = response.data.total;
@@ -150,7 +150,7 @@ export function useListingFunctions() {
                 dev: devMode.value == 'true' ? true : false,
                 mileage_plus_minus: mileagePlusMinus.value
             }
-            console.log(params)
+            // console.log(params)
             const response = await axios.post(urlAPI + "/start_scraping", sitesToScrap.value,
                 {
                     params: params,
@@ -162,7 +162,7 @@ export function useListingFunctions() {
             );
 
             // 
-            console.log('Start Scraping :', response.data);
+            // console.log('Start Scraping :', response.data);
             scrapStarted.value = true;
             showToast('Success', "Successfully Started Scrapping. You can check Status anytime by pressing on the button", 'i-heroicons-check-badge', 'success');
             // Stocker l'access token dans la session du navigateur
@@ -196,7 +196,7 @@ export function useListingFunctions() {
             );
 
             // 
-            console.log('Scraping Status :', response.data);
+            // console.log('Scraping Status :', response.data);
             totalToProcess.value = response.data.details.data[0].total_running;
             alreadyProcessed.value = response.data.details.data[0].total_completed;
             scrapStatus.value = (alreadyProcessed.value * 100 / totalToProcess.value).toFixed(2) + ' %';
@@ -243,7 +243,7 @@ export function useListingFunctions() {
     const openModal = async (car: any) => {
         selectedCar.value = car;
         const result = car.comparisons  //await getCarComparisons(car.id)
-        console.log('result ', result);
+        // console.log('result ', result);
         // gat comparaisons
         relatedCars.value = result;
         resLaCentrale.value = computed(() => { return relatedCars.value.filter(vtr => vtr.domain === 'https://www.lacentrale.fr/').length ?? 0 });
@@ -285,7 +285,7 @@ export function useListingFunctions() {
             });
 
             importSuccess.value = true;
-            console.log('Upload successful:', response.data);
+            // console.log('Upload successful:', response.data);
         } catch (error) {
             importError.value = 'Error while uploading your file !';
             console.error('Upload error:', error);
