@@ -182,7 +182,7 @@ export function useBDealsFunctions() {
         const accessToken = sessionStorage.getItem('AccessToken');
         const refToken = sessionStorage.getItem('RefreshToken');
         try {
-            while (cars.value.length != totalCount.value) {
+            while (cars.value.length < totalCount.value) {
 
                 console.log("Loading Cars : ", cars.value.length , " / ", totalCount.value)
 
