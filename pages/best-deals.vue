@@ -141,7 +141,7 @@
             <p class="font-bold"> No Data to Show !</p>
           </div>
           <div v-if="!loadingCars && cars.length != 0" class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <div v-for="car in paginatedCars" :key="car.id" class="relative">
+            <div v-for="car in filteredCars" :key="car.id" class="relative">
               <ListModel :key="car.id" :car="car" :mPercent="mPercent" @view="openModal" />
             </div>
           </div>
@@ -151,7 +151,7 @@
             :resAutoScout="resAutoScout" :relatedCars="relatedCars" :resLebonCoin="resLebonCoin" />
           <!-- Pagination -->
           <div class="justify-center">
-            <UPagination v-model:page="currentPage" :total="filteredCars.length" :to="to" :sibling-count="1" show-edges
+            <UPagination v-model:page="currentPage" :total="totalCount" :to="to" :sibling-count="1" show-edges
               :per-page="itemsPerPage" align="center" firstIcon="i-heroicons-chevron-double-left"
               prevIcon="i-heroicons-chevron-left" nextIcon="i-heroicons-chevron-right"
               lastIcon="i-heroicons-chevron-double-right" class="mt-6  place-self-center" />
@@ -169,6 +169,7 @@ import CarResultsModal from '../components/deals/CarResultsModal.vue';
 import { useBDealsFunctions } from '~/composables/useBDealsFunctions';
 import { UInput } from '#components';
 const {
+  totalCount,
   sortOrder,
 exportCSV,
   mPercent,
@@ -197,8 +198,6 @@ exportCSV,
   availableModels,
   availableDeals,
   filteredCars,
-  pageCount,
-  paginatedCars,
   to,
 } = useBDealsFunctions();
 definePageMeta({

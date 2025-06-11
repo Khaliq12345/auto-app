@@ -22,6 +22,7 @@ export function useBDealsFunctions() {
     const resLebonCoin = ref();
     const currentPage = ref(1);
     const itemsPerPage = 10;
+    const totalCount = ref(10);
     const cars = ref<any[]>([])
     const route = useRoute()
     const domain = ref();//computed(() => route.query.domain)
@@ -146,11 +147,11 @@ export function useBDealsFunctions() {
                     params: {
                         access_token: accessToken,
                         refresh_token: refToken,
-                        // page : 4,
+                        page : currentPage.value,
                         cut_off_price: cutOffPrice.value,
                         percentage_limit: mPercent.value,
                         domain: domainVar,
-                        limit: 250
+                        limit: 20
                     },
                     headers: {
                         "accept": "application/json",
@@ -162,6 +163,7 @@ export function useBDealsFunctions() {
             // 
             console.log('Get Cars:', response.data);
             cars.value = response.data.details;
+            totalCount.value = response.data.total;
             // Stocker l'access token dans la session du navigateur
             sessionStorage.setItem('AccessToken', response.data.session.session.access_token);
             sessionStorage.setItem('RefreshToken', response.data.session.session.refresh_token);
@@ -199,12 +201,6 @@ export function useBDealsFunctions() {
             return sortOrder.value != 'asc' ? (a.price_difference_with_avg_price ?? 99) - (b.price_difference_with_avg_price ?? 99) : (b.price_difference_with_avg_price ?? 99) - (a.price_difference_with_avg_price ?? 99);
         });
     });
-    const pageCount = computed(() => Math.ceil(filteredCars.value.length / itemsPerPage));
-    const paginatedCars = computed(() => {
-        const start = (currentPage.value - 1) * itemsPerPage;
-        const end = start + itemsPerPage;
-        return filteredCars.value.slice(start, end);
-    });
     const openModal = async (car: any) => {
         selectedCar.value = car;
         const result = car.comparisons  //await getCarComparisons(car.id)
@@ -230,6 +226,7 @@ export function useBDealsFunctions() {
 
 
     return {
+        totalCount,
         sortOrder,
         exportCSV,
         mPercent,
@@ -258,8 +255,6 @@ export function useBDealsFunctions() {
         availableModels,
         availableDeals,
         filteredCars,
-        pageCount,
-        paginatedCars,
         to,
     };
 }

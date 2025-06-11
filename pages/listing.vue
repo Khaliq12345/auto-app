@@ -218,7 +218,7 @@
             <p class="font-bold"> No Data to Show !</p>
           </div>
           <div v-if="!loadingCars && cars.length != 0" class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <div v-for="car in paginatedCars" :key="car.id" class="relative">
+            <div v-for="car in filteredCars" :key="car.id" class="relative">
               <ListModel :key="car.id" :car="car" @view="openModal" />
             </div>
           </div>
@@ -231,7 +231,7 @@
             :alreadyProcessed="alreadyProcessed" :scrapStatus="scrapStatus" /> -->
           <!-- Pagination -->
           <div class="justify-center">
-            <UPagination v-model:page="currentPage" :total="filteredCars.length" :to="to" :sibling-count="1" show-edges
+            <UPagination v-model:page="currentPage" :total="totalCount" :to="to" :sibling-count="1" show-edges
               :per-page="itemsPerPage" align="center" firstIcon="i-heroicons-chevron-double-left"
               prevIcon="i-heroicons-chevron-left" nextIcon="i-heroicons-chevron-right"
               lastIcon="i-heroicons-chevron-double-right" class="mt-6  place-self-center" />
@@ -249,9 +249,11 @@ import ScrapStatusModal from '../components/listing/ScrapStatusModal.vue';
 import CarResultsModal from '../components/listing/CarResultsModal.vue';
 import { useListingFunctions } from '~/composables/useListingFunctions';
 import { UInput } from '#components';
+import PaginationControls from '../components/PaginationControls.vue'
 
 const
   {
+    totalCount,
     sortOrder,
     devMode,
     ignoreOld,
@@ -296,8 +298,6 @@ const
     availableModels,
     availableDeals,
     filteredCars,
-    pageCount,
-    paginatedCars,
     openModal,
     to,
     handleFileChange,
@@ -306,9 +306,6 @@ const
 definePageMeta({
   middleware: ["auth"]
 })
-// onMounted(() => {
-//   getAllCars();
-// });
 
 const menuItems = ref([
   {
@@ -337,5 +334,9 @@ const menuItems = ref([
   },
 ])
 
+    // 
+    watch(() => currentPage.value, ()=>{
+      getAllCars()
+    } )
 
 </script>

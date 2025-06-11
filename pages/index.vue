@@ -7,7 +7,12 @@ onMounted(async () => {
    await new Promise(resolve => setTimeout(resolve, 1000));
   const accessToken = sessionStorage.getItem('AccessToken');
   if (accessToken) {
-    router.push('/listing'); // Rediriger vers listing si connecté
+    router.push({
+  path: '/listing', 
+  query: {
+    page: 1
+  }
+}); // Rediriger vers listing si connecté
   } else {
     router.push('/login'); // Rediriger vers login si non connecté
   }

@@ -35,6 +35,7 @@ export function useListingFunctions() {
     const selectedModels = ref<any[]>([]);
     const selectedDeals = ref<any[]>([]);
     const currentPage = ref(1);
+    const totalCount = ref(10);
     const itemsPerPage = 10;
     const cars = ref<any[]>([])
     // Excel
@@ -43,6 +44,7 @@ export function useListingFunctions() {
     const uploadProgress = ref(0);
     const importError = ref();
     const importSuccess = ref(false);
+    // 
     // Methods
     // 
     const reloadPage = () => {
@@ -67,11 +69,11 @@ export function useListingFunctions() {
                     params: {
                         access_token: accessToken,
                         refresh_token: refToken,
-                        // page : 4,
+                        page : currentPage.value,
                         cut_off_price: cutOffPrice.value,
                         percentage_limit: mPercent.value,
                         domain: '',
-                        limit: 250
+                        limit: 20
                     },
                     headers: {
                         "accept": "application/json",
@@ -81,8 +83,11 @@ export function useListingFunctions() {
             );
 
             // 
+            console.log('Got cars for page :', currentPage.value, " got results ", response.data.details.length);
             console.log('Get Cars:', response.data);
             cars.value = response.data.details;
+            // 
+            totalCount.value = response.data.total;
             // Stocker l'access token dans la session du navigateur
             sessionStorage.setItem('AccessToken', response.data.session.session.access_token);
             sessionStorage.setItem('RefreshToken', response.data.session.session.refresh_token);
@@ -228,18 +233,12 @@ export function useListingFunctions() {
             const modelMatch = selectedModels.value.length ? selectedModels.value.includes(car.make) : true;
             const dealMatch = selectedDeals.value.length ? selectedDeals.value.includes(car.card_color) : true;
 
-            currentPage.value = 1
+            // currentPage.value = 1
 
             return searchMatch && colorMatch && modelMatch && dealMatch;
         }).sort((a, b) => {
             return sortOrder.value != 'asc' ? (a.price_difference_with_avg_price ?? 99) - (b.price_difference_with_avg_price ?? 99) : (b.price_difference_with_avg_price ?? 99) - (a.price_difference_with_avg_price ?? 99);
         });
-    });
-    const pageCount = computed(() => Math.ceil(filteredCars.value.length / itemsPerPage));
-    const paginatedCars = computed(() => {
-        const start = (currentPage.value - 1) * itemsPerPage;
-        const end = start + itemsPerPage;
-        return filteredCars.value.slice(start, end);
     });
     const openModal = async (car: any) => {
         selectedCar.value = car;
@@ -317,7 +316,9 @@ export function useListingFunctions() {
         }
     });
 
+    
     return {
+        totalCount,
         sortOrder,
         devMode,
         ignoreOld,
@@ -362,8 +363,6 @@ export function useListingFunctions() {
         availableModels,
         availableDeals,
         filteredCars,
-        pageCount,
-        paginatedCars,
         openModal,
         to,
         handleFileChange,
