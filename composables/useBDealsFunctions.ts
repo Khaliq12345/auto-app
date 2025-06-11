@@ -22,7 +22,7 @@ export function useBDealsFunctions() {
     const resLebonCoin = ref();
     const currentPage = ref(1);
     const itemsPerPage = 10;
-    const totalCount = ref(10);
+    const totalCount = ref(1);
     const cars = ref<any[]>([])
     const route = useRoute()
     const domain = ref();//computed(() => route.query.domain)
@@ -137,7 +137,7 @@ export function useBDealsFunctions() {
         sessionStorage.removeItem('ExpiresAt');
         router.push('/login');
     };
-    const getAllCars = async (domainVar: any) => {
+    const getAllCars2 = async (domainVar: any) => {
         loadingCars.value = true;
         const accessToken = sessionStorage.getItem('AccessToken');
         const refToken = sessionStorage.getItem('RefreshToken');
@@ -177,6 +177,52 @@ export function useBDealsFunctions() {
         }
 
     }
+    const getAllCars = async (domainVar: any) => {
+        loadingCars.value = true;
+        const accessToken = sessionStorage.getItem('AccessToken');
+        const refToken = sessionStorage.getItem('RefreshToken');
+        try {
+            while (cars.value.length != totalCount.value) {
+
+                console.log("Loading Cars : ", cars.value.length , " / ", totalCount.value)
+
+            const response = await axios.get(urlAPI + "/get_all_cars",
+                {
+                    params: {
+                        access_token: accessToken,
+                        refresh_token: refToken,
+                        // page : currentPage.value,
+                        cut_off_price: cutOffPrice.value,
+                        percentage_limit: mPercent.value,
+                        domain: domainVar,
+                        limit: 100
+                    },
+                    headers: {
+                        "accept": "application/json",
+                        "content-type": "application/x-www-form-urlencoded",
+                    },
+                },
+            );
+
+            // 
+            // console.log('Get Cars:', response.data);
+            cars.value.push(...response.data.details);
+            totalCount.value = response.data.total;
+            // Stocker l'access token dans la session du navigateur
+            sessionStorage.setItem('AccessToken', response.data.session.session.access_token);
+            sessionStorage.setItem('RefreshToken', response.data.session.session.refresh_token);
+            sessionStorage.setItem('ExpiresAt', response.data.session.session.expires_at);
+
+        }
+
+        } catch (err) {
+            console.error('Erreur de requete:', err);
+        } finally {
+            // 
+            loadingCars.value = false;
+        }
+
+    }
     // 
     const availableColors = computed(() => cars.value ? [...new Set(cars.value.map(car => car.color))].filter(Boolean).map(color => ({ label: color, value: color })) : []);
     const availableModels = computed(() => cars.value ? [...new Set(cars.value.map(car => car.make))].filter(Boolean).map(model => ({ label: model, value: model })) : []);
@@ -200,6 +246,11 @@ export function useBDealsFunctions() {
         }).sort((a, b) => {
             return sortOrder.value != 'asc' ? (a.price_difference_with_avg_price ?? 99) - (b.price_difference_with_avg_price ?? 99) : (b.price_difference_with_avg_price ?? 99) - (a.price_difference_with_avg_price ?? 99);
         });
+    });
+    const paginatedCars = computed(() => {
+        const start = (currentPage.value - 1) * itemsPerPage;
+        const end = start + itemsPerPage;
+        return filteredCars.value.slice(start, end);
     });
     const openModal = async (car: any) => {
         selectedCar.value = car;
@@ -255,6 +306,7 @@ export function useBDealsFunctions() {
         availableModels,
         availableDeals,
         filteredCars,
+        paginatedCars,
         to,
     };
 }

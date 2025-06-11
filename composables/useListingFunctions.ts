@@ -35,7 +35,7 @@ export function useListingFunctions() {
     const selectedModels = ref<any[]>([]);
     const selectedDeals = ref<any[]>([]);
     const currentPage = ref(1);
-    const totalCount = ref(10);
+    const totalCount = ref(1);
     const itemsPerPage = 10;
     const cars = ref<any[]>([])
     // Excel
@@ -59,7 +59,7 @@ export function useListingFunctions() {
         sessionStorage.removeItem('ExpiresAt');
         router.push('/login');
     };
-    const getAllCars = async () => {
+    const getAllCars2 = async () => {
         loadingCars.value = true;
         const accessToken = sessionStorage.getItem('AccessToken');
         const refToken = sessionStorage.getItem('RefreshToken');
@@ -69,11 +69,11 @@ export function useListingFunctions() {
                     params: {
                         access_token: accessToken,
                         refresh_token: refToken,
-                        page : currentPage.value,
+                        // page : currentPage.value,
                         cut_off_price: cutOffPrice.value,
                         percentage_limit: mPercent.value,
                         domain: '',
-                        limit: 20
+                        limit: 100
                     },
                     headers: {
                         "accept": "application/json",
@@ -92,6 +92,57 @@ export function useListingFunctions() {
             sessionStorage.setItem('AccessToken', response.data.session.session.access_token);
             sessionStorage.setItem('RefreshToken', response.data.session.session.refresh_token);
             sessionStorage.setItem('ExpiresAt', response.data.session.session.expires_at);
+
+        } catch (err) {
+            console.error('Erreur de requete:', err);
+        } finally {
+            // 
+            loadingCars.value = false;
+        }
+
+    }
+    const getAllCars = async () => {
+        loadingCars.value = true;
+        const accessToken = sessionStorage.getItem('AccessToken');
+        const refToken = sessionStorage.getItem('RefreshToken');
+        cars.value = []
+        
+        try {
+            while ( cars.value.length < totalCount.value) {
+
+                console.log("Loading Cars : ", cars.value.length , " / ", totalCount.value)
+                
+            const response = await axios.get(urlAPI + "/get_all_cars",
+                {
+                    params: {
+                        access_token: accessToken,
+                        refresh_token: refToken,
+                        // page : currentPage.value,
+                        cut_off_price: cutOffPrice.value,
+                        percentage_limit: mPercent.value,
+                        domain: '',
+                        limit: 100
+                    },
+                    headers: {
+                        "accept": "application/json",
+                        "content-type": "application/x-www-form-urlencoded",
+                    },
+                },
+            );
+
+            // 
+            // console.log('Got cars for page :', currentPage.value, " got results ", response.data.details.length);
+            // console.log('Get Cars:', response.data);
+            cars.value.push(...response.data.details);
+            // 
+            totalCount.value = response.data.total;
+            // Stocker l'access token dans la session du navigateur
+            sessionStorage.setItem('AccessToken', response.data.session.session.access_token);
+            sessionStorage.setItem('RefreshToken', response.data.session.session.refresh_token);
+            sessionStorage.setItem('ExpiresAt', response.data.session.session.expires_at);
+            
+        }
+        
 
         } catch (err) {
             console.error('Erreur de requete:', err);
@@ -240,6 +291,11 @@ export function useListingFunctions() {
             return sortOrder.value != 'asc' ? (a.price_difference_with_avg_price ?? 99) - (b.price_difference_with_avg_price ?? 99) : (b.price_difference_with_avg_price ?? 99) - (a.price_difference_with_avg_price ?? 99);
         });
     });
+    const paginatedCars = computed(() => {
+        const start = (currentPage.value - 1) * itemsPerPage;
+        const end = start + itemsPerPage;
+        return filteredCars.value.slice(start, end);
+    });
     const openModal = async (car: any) => {
         selectedCar.value = car;
         const result = car.comparisons  //await getCarComparisons(car.id)
@@ -363,6 +419,7 @@ export function useListingFunctions() {
         availableModels,
         availableDeals,
         filteredCars,
+        paginatedCars,
         openModal,
         to,
         handleFileChange,

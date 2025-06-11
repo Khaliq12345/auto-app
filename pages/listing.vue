@@ -225,7 +225,7 @@
             <p class="font-bold"> No Data to Show !</p>
           </div>
           <div v-if="!loadingCars && cars.length != 0" class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <div v-for="car in filteredCars" :key="car.id" class="relative">
+            <div v-for="car in paginatedCars" :key="car.id" class="relative">
               <ListModel :key="car.id" :car="car" @view="openModal" />
             </div>
           </div>
@@ -305,6 +305,7 @@ const
     availableModels,
     availableDeals,
     filteredCars,
+    paginatedCars,
     openModal,
     to,
     handleFileChange,
@@ -340,10 +341,9 @@ const menuItems = ref([
     ]
   },
 ])
-
     // 
-    watch(() => currentPage.value, ()=>{
-      getAllCars()
-    } )
+    // watch(() => currentPage.value, ()=>{
+    //   getAllCars()
+    // } )
 
 </script>
