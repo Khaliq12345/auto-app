@@ -248,6 +248,7 @@ export function useBDealsFunctions() {
             const dealMatch = selectedDeals.value.length ? selectedDeals.value.includes(car.card_color) : true;
 
             // currentPage.value = 1
+            // console.log("Sort Order : ", sortOrder)
 
             return searchMatch && colorMatch && modelMatch && dealMatch;
         }).sort((a, b) => {
@@ -257,10 +258,12 @@ export function useBDealsFunctions() {
     const paginatedCars = computed(() => {
         const start = (currentPage.value - 1) * itemsPerPage;
         const end = start + itemsPerPage;
+        console.log('current page  ', currentPage.value, " start ", start, " end ", end, " fil ", filteredCars.value.slice(start, end).length);
         return filteredCars.value.slice(start, end);
     });
     const openModal = async (car: any) => {
         selectedCar.value = car;
+        console.log("Car to show : ", car)
         const result = car.comparisons  //await getCarComparisons(car.id)
         // console.log('result ', result);
         // gat comparaisons
@@ -270,12 +273,11 @@ export function useBDealsFunctions() {
         resLebonCoin.value = computed(() => { return relatedCars.value.filter(vtr => vtr.domain === 'https://www.leboncoin.fr/').length ?? 0 });
         isModalOpen.value = true;
     };
-
     const to = (page: any) => {
+        // console.log(" holla", page);
         return {
             query: {
-                page,
-                domain: domain.value
+                page
             },
             // hash: '#with-links'
         }

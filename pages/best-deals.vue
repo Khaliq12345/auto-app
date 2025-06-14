@@ -141,8 +141,8 @@
             <p class="font-bold"> No Data to Show !</p>
           </div>
           <div v-if="!loadingCars && cars.length != 0" class="grid grid-cols-1 lg:grid-cols-2 gap-4">
-            <div v-for="car in paginatedCars" :key="car.id" class="relative">
-              <ListModel :key="car.id" :car="car" :mPercent="mPercent" @view="openModal" />
+            <div v-for="car in paginatedCars" class="relative">
+              <ListModel :car="car" :mPercent="mPercent" @view="openModal" />
             </div>
           </div>
           <!-- Others -->
@@ -169,38 +169,38 @@ import CarResultsModal from '../components/deals/CarResultsModal.vue';
 import { useBDealsFunctions } from '~/composables/useBDealsFunctions';
 import { UInput } from '#components';
 const {
-  totalCount,
-  sortOrder,
-exportCSV,
-  mPercent,
-  openModal,
-  isModalOpen,
-  selectedCar,
-  resLaCentrale,
-  resAutoScout,
-  resLebonCoin,
-  relatedCars,
-  domain,
-  cutOffPrice,
-  reloadPage,
-  loadingCars,
-  title,
-  searchTerm,
-  selectedColors,
-  selectedModels,
-  selectedDeals,
-  currentPage,
-  itemsPerPage,
-  cars,
-  handleLogout,
-  getAllCars,
-  availableColors,
-  availableModels,
-  availableDeals,
-  filteredCars,
-  paginatedCars,
-  to,
-} = useBDealsFunctions();
+        totalCount,
+        sortOrder,
+        exportCSV,
+        mPercent,
+        openModal,
+        isModalOpen,
+        selectedCar,
+        resLaCentrale,
+        resAutoScout,
+        resLebonCoin,
+        relatedCars,
+        domain,
+        cutOffPrice,
+        reloadPage,
+        loadingCars,
+        title,
+        searchTerm,
+        selectedColors,
+        selectedModels,
+        selectedDeals,
+        currentPage,
+        itemsPerPage,
+        cars,
+        handleLogout,
+        getAllCars,
+        availableColors,
+        availableModels,
+        availableDeals,
+        filteredCars,
+        paginatedCars,
+        to,
+    } = useBDealsFunctions();
 definePageMeta({
   middleware: ["auth"]
 })

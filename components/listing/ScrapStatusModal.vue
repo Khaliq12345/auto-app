@@ -3,7 +3,7 @@
       v-model:open="model"
       title="Scrapping Status"
       description="We're processing your data"
-      :ui="{ footer: 'justify-end', rounded: 'lg', shadow: 'lg', overlay: ' opacity-30' }"
+      :ui="{ footer: 'justify-end', rounded: 'lg', shadow: 'lg', wraper: ' opacity-30' }"
       :close="{
         color: 'primary',
         variant: 'outline',

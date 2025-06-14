@@ -295,10 +295,12 @@ export function useListingFunctions() {
     const paginatedCars = computed(() => {
         const start = (currentPage.value - 1) * itemsPerPage;
         const end = start + itemsPerPage;
+        console.log('current page  ', currentPage.value, " start ", start, " end ", end, " fil ", filteredCars.value.slice(start, end).length);
         return filteredCars.value.slice(start, end);
     });
     const openModal = async (car: any) => {
         selectedCar.value = car;
+        console.log("Car to show : ", car)
         const result = car.comparisons  //await getCarComparisons(car.id)
         // console.log('result ', result);
         // gat comparaisons
