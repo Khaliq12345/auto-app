@@ -109,6 +109,7 @@ export function useListingFunctions() {
         cars.value = []
         sessionStorage.setItem(`${stored_route}_scraping`, '1');
         try {
+            let i = 0
             while (cars.value.length < totalCount.value) {
                 console.log("Loading Cars : ", cars.value.length, " / ", totalCount.value, stored_route)
                 const response = await axios.get(urlAPI + "/get_all_cars",
@@ -116,7 +117,7 @@ export function useListingFunctions() {
                         params: {
                             access_token: accessToken,
                             refresh_token: refToken,
-                            // page : currentPage.value,
+                            page: i,
                             cut_off_price: cutOffPrice.value,
                             percentage_limit: mPercent.value,
                             domain: '',
@@ -129,9 +130,9 @@ export function useListingFunctions() {
                         // timeout: 60000,
                     },
                 );
-                // 
-                // console.log('Got cars for page :', currentPage.value, " got results ", response.data.details.length);
-                // console.log('Get Cars:', response.data);
+                //
+                // console.log(" page : ", i, " Got : ", response.data.details.length)
+                i = i + 100
                 cars.value.push(...response.data.details);
                 // 
                 totalCount.value = response.data.total;

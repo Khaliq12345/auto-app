@@ -186,6 +186,7 @@ export function useBDealsFunctions() {
         cars.value = []
         sessionStorage.setItem(`${stored_route}_scraping`, '1');
         try {
+            let i = 0
             while (cars.value.length < totalCount.value) {
                 const stored_route = sessionStorage.getItem('route')
                 console.log("Loading Cars : ", cars.value.length, " / ", totalCount.value, stored_route)
@@ -194,7 +195,7 @@ export function useBDealsFunctions() {
                         params: {
                             access_token: accessToken,
                             refresh_token: refToken,
-                            // page : currentPage.value,
+                            page : i,
                             cut_off_price: cutOffPrice.value,
                             percentage_limit: mPercent.value,
                             domain: domainVar,
@@ -209,6 +210,7 @@ export function useBDealsFunctions() {
                 );
                 // 
                 // console.log('Get Cars:', response.data);
+                i = i + 100
                 cars.value.push(...response.data.details);
                 totalCount.value = response.data.total;
                 // Stocker l'access token dans la session du navigateur
