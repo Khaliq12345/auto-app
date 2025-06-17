@@ -48,6 +48,7 @@ export function useBDealsFunctions() {
     const exportCSV = () => {
         const rows: string[] = [];
         // const headersSet = new Set<string>();
+        // console.log(cars.value);
 
         const bestMatches = cars.value.map((car: any) => {
             let match = car.comparisons?.find(
@@ -60,7 +61,6 @@ export function useBDealsFunctions() {
                     // headersSet.add(key)
                     if (key != 'comparisons') {
                         match[`original_${key}`] = car[key]
-
                     }
                 });
                 // match["original_car"] = car
@@ -85,7 +85,8 @@ export function useBDealsFunctions() {
             // 'original_price_with_no_tax',
             'original_lowest_price',
             'original_average_price',
-            // 'original_average_price_based_on_best_match',
+            'original_average_price_based_on_best_match',
+            'original_price_difference_with_avg_price',
             'matching_percent_from_filter',
             'matching_percentage',
             // 'matching_percentage_reason',
@@ -99,8 +100,6 @@ export function useBDealsFunctions() {
             // 'mileage'
         ];
         rows.push(headers.join(","));
-
-        // console.log('best matches : ', bestMatches);
 
         for (const match of bestMatches) {
             const row =
