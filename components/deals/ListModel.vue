@@ -70,12 +70,12 @@
       </div>
 
     </div>
-    <div v-if="bestMatchingCar" class="text-center flex justify-center gap-x-3 w-100 mt-2">
+    <div v-if="car.best_match_percentage" class="text-center flex justify-center gap-x-3 w-100 mt-2">
       <span class="text-sm  mb-4">
         <UIcon size="20" name="i-heroicons-sparkles" class="mx-auto align-sub text-warning-800" />
-        Best Matching : {{ bestMatchingCar.matching_percentage.toFixed(2) }} %
+        Best Matching : {{ car.best_match_percentage.toFixed(2) }} %
       </span>
-      <a :href="bestMatchingCar.link" target="_blank" rel="noopener noreferrer" class="text-sm ">
+      <a :href="car.best_match_link" target="_blank" rel="noopener noreferrer" class="text-sm ">
                   <UIcon size="15" name="i-heroicons-link" class="text-blue-500 " /> Best Match Link
                 </a>
     </div>
@@ -108,6 +108,8 @@ const bestMatchingCar = computed(() => {
     caro.matching_percentage >= (props.mPercent ?? 0)
   ) || null;
 });
+
+console.log(props.car)
 
 defineEmits(['view'])
 </script>
