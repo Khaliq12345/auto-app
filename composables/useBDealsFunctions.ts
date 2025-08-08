@@ -96,7 +96,7 @@ export function useBDealsFunctions() {
             // 'name',
             // 'price',
             // 'deal_type',
-            // 'fuel_type',
+            'fuel_type',
             // 'mileage'
         ];
         rows.push(headers.join(","));
