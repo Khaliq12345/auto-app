@@ -96,7 +96,16 @@
                   <div class="">
                     <span class=" text-xs font-bold">Export Best Deals</span>
                     <div class="text-center place-self-center mt-2">
-                      <UButton :disabled="false" :loading="loadingCars" @click="exportCSV" :label="false? 'Exporting' : 'Export CSV'"
+                      <UButton :disabled="false" :loading="loadingCars" @click="exportCSV(false)" :label="false? 'Exporting' : 'Export CSV'"
+                          color="primary" icon="i-heroicons-arrow-path" />
+                    </div>
+                  </div>
+                  <!--  -->
+                  <!--  -->
+                  <div class="">
+                    <span class=" text-xs font-bold">Export All Deals</span>
+                    <div class="text-center place-self-center mt-2">
+                      <UButton :disabled="false" :loading="loadingCars" @click="exportCSV(true)" :label="false? 'Exporting' : 'Export CSV'"
                           color="primary" icon="i-heroicons-arrow-path" />
                     </div>
                   </div>
@@ -168,6 +177,7 @@ import ListModel from '../components/deals/ListModel.vue';
 import CarResultsModal from '../components/deals/CarResultsModal.vue';
 import { useBDealsFunctions } from '~/composables/useBDealsFunctions';
 import { UInput } from '#components';
+import { all } from 'axios';
 const {
         totalCount,
         sortOrder,

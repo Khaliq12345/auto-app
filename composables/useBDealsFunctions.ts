@@ -45,28 +45,51 @@ export function useBDealsFunctions() {
         // window.location.reload()
         // navigateTo(route.fullPath, { replace: true })
     }
-    const exportCSV = () => {
+    const exportCSV = (all: boolean) => {
+        console.log("got All : ", all)
         const rows: string[] = [];
-        // const headersSet = new Set<string>();
-        // console.log(cars.value);
 
-        const bestMatches = cars.value.map((car: any) => {
-            let match = car.comparisons?.find(
-                (comparison: any) => comparison.matching_percentage >= mPercent.value
-            );
-            if (match) {
-                // headersSet.add("Original Car")
-                match['matching_percent_from_filter'] = mPercent.value;
-                Object.keys(car).forEach((key: string) => {
-                    // headersSet.add(key)
-                    if (key != 'comparisons') {
-                        match[`original_${key}`] = car[key]
-                    }
+        let bestMatches = [];
+
+        if (all) {
+            bestMatches = cars.value.flatMap((car: any) => {
+                return (car.comparisons || []).map((comparison: any) => {
+                    // Ajouter l'info du filtre utilisé
+                    comparison['matching_percent_from_filter'] = mPercent.value;
+
+                    // Ajouter toutes les infos originales de la voiture
+                    Object.keys(car).forEach((key: string) => {
+                        if (key !== 'comparisons') {
+                            comparison[`original_${key}`] = car[key];
+                        }
+                    });
+
+                    return comparison;
                 });
-                // match["original_car"] = car
-            }
-            return match || null;
-        }).filter(Boolean);
+            });
+
+
+        } else {
+            bestMatches = cars.value.map((car: any) => {
+                let match = car.comparisons?.find(
+                    (comparison: any) => comparison.matching_percentage >= mPercent.value
+                );
+                if (match) {
+                    // headersSet.add("Original Car")
+                    match['matching_percent_from_filter'] = mPercent.value;
+                    Object.keys(car).forEach((key: string) => {
+                        // headersSet.add(key)
+                        if (key != 'comparisons') {
+                            match[`original_${key}`] = car[key]
+                        }
+                    });
+                    // match["original_car"] = car
+                }
+                return match || null;
+            }).filter(Boolean);
+        }
+
+
 
         if (bestMatches.length === 0) {
             console.warn("Aucune voiture ne correspond au pourcentage minimum.");
@@ -117,7 +140,7 @@ export function useBDealsFunctions() {
         const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
 
         const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
-        const filename = `bestMC_${timestamp}.csv`;
+        const filename = `${all?'allMC':'bestMC'}_${timestamp}.csv`;
 
         const link = document.createElement("a");
         const url = URL.createObjectURL(blob);
@@ -178,7 +201,7 @@ export function useBDealsFunctions() {
     }
     const getAllCars = async (domainVar: any) => {
         sessionStorage.setItem('route', domainVar)
-       const stored_route = sessionStorage.getItem('route')
+        const stored_route = sessionStorage.getItem('route')
         loadingCars.value = true;
         const accessToken = sessionStorage.getItem('AccessToken');
         const refToken = sessionStorage.getItem('RefreshToken');
@@ -194,7 +217,7 @@ export function useBDealsFunctions() {
                         params: {
                             access_token: accessToken,
                             refresh_token: refToken,
-                            page : i,
+                            page: i,
                             cut_off_price: cutOffPrice.value,
                             percentage_limit: mPercent.value,
                             domain: domainVar,
