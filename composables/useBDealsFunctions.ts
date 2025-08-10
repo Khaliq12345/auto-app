@@ -51,76 +51,54 @@ export function useBDealsFunctions() {
 
         let bestMatches = [];
 
+        // If exporting all deals
         if (all) {
             bestMatches = cars.value.flatMap((car: any) => {
                 return (car.comparisons || []).map((comparison: any) => {
-                    // Ajouter l'info du filtre utilisé
                     comparison['matching_percent_from_filter'] = mPercent.value;
-
-                    // Ajouter toutes les infos originales de la voiture
-                    Object.keys(car).forEach((key: string) => {
-                        if (key !== 'comparisons') {
-                            comparison[`original_${key}`] = car[key];
-                        }
-                    });
-
+                    comparison['original_id'] = car.id;
                     return comparison;
                 });
             });
-
-
-        } else {
-            bestMatches = cars.value.map((car: any) => {
-                let match = car.comparisons?.find(
-                    (comparison: any) => comparison.matching_percentage >= mPercent.value
-                );
-                if (match) {
-                    // headersSet.add("Original Car")
-                    match['matching_percent_from_filter'] = mPercent.value;
-                    Object.keys(car).forEach((key: string) => {
-                        // headersSet.add(key)
-                        if (key != 'comparisons') {
-                            match[`original_${key}`] = car[key]
-                        }
-                    });
-                    // match["original_car"] = car
-                }
-                return match || null;
-            }).filter(Boolean);
         }
+        // If exporting only best deals
+        else {
+            bestMatches = cars.value
+                .filter((car: any) => car.card_color !== 'red')
+                .flatMap((car: any) => {
+                    const matches = (car.comparisons || []).filter(
+                        (comparison: any) => comparison.matching_percentage >= mPercent.value
+                    );
+                    return matches.map((match: any) => {
+                        match['matching_percent_from_filter'] = mPercent.value;
+                        match['original_id'] = car.id;
+                        return match;
+                    });
+                });
 
-
-
+        }
         if (bestMatches.length === 0) {
             console.warn("Aucune voiture ne correspond au pourcentage minimum.");
             return;
         }
-
         const headers = [
             'original_id',
-            // 'original_car_url',
-            'original_make',
-            'original_model',
-            // 'original_mileage',
-            // 'original_mfuel_type',
-            // 'original_color',
-            'original_price_with_tax',
-            // 'original_price_with_no_tax',
-            'original_lowest_price',
-            'original_average_price',
-            'original_average_price_based_on_best_match',
-            'original_price_difference_with_avg_price',
-            'matching_percent_from_filter',
-            'matching_percentage',
-            // 'matching_percentage_reason',
-            // 'domain',
-            'id',
-            // 'link',
-            // 'name',
-            // 'price',
-            // 'deal_type',
-            'fuel_type',
-            // 'mileage'
+            "id",
+            "link",
+            "name",
+            "image",
+            "price",
+            "domain",
+            "mileage",
+            "deal_type",
+            "fuel_type",
+            "created_at",
+            "updated_at",
+            "car_metadata",
+            "parent_car_id",
+            "boite_de_vitesse",
+            "matching_percentage",
+            "matching_percentage_reason",
         ];
         rows.push(headers.join(","));
 
@@ -140,7 +118,7 @@ export function useBDealsFunctions() {
         const blob = new Blob([csvContent], { type: "text/csv;charset=utf-8;" });
 
         const timestamp = new Date().toISOString().replace(/[:.]/g, "-");
-        const filename = `${all?'allMC':'bestMC'}_${timestamp}.csv`;
+        const filename = `${all ? 'allMC' : 'bestMC'}_${timestamp}.csv`;
 
         const link = document.createElement("a");
         const url = URL.createObjectURL(blob);
