@@ -57,6 +57,8 @@ export function useBDealsFunctions() {
                 return (car.comparisons || []).map((comparison: any) => {
                     comparison['matching_percent_from_filter'] = mPercent.value;
                     comparison['original_id'] = car.id;
+                    comparison['original_price_difference_with_avg_price'] = car.price_difference_with_avg_price;
+                    comparison['original_car_url'] = car.car_url;
                     return comparison;
                 });
             });
@@ -72,6 +74,8 @@ export function useBDealsFunctions() {
                     return matches.map((match: any) => {
                         match['matching_percent_from_filter'] = mPercent.value;
                         match['original_id'] = car.id;
+                        match['original_price_difference_with_avg_price'] = car.price_difference_with_avg_price;
+                        match['original_car_url'] = car.car_url;
                         return match;
                     });
                 });
@@ -83,6 +87,8 @@ export function useBDealsFunctions() {
         }
         const headers = [
             'original_id',
+            'original_price_difference_with_avg_price',
+            'original_car_url',
             "id",
             "link",
             "name",
